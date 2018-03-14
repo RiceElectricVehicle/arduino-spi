@@ -81,11 +81,8 @@ unsigned int spiReadReg(unsigned int address){ //Address: 0xXXXA with A <= 7
   digitalWrite(SCS, LOW);
   return value;
   } 
-  
- boolean spiCheckParam(unsigned int address, int[] correct_vals){
- 
    
- 
+   
  
  }
   
