@@ -17,29 +17,31 @@
 #define DATAIN 12 //MISO
 #define SPICLK 13//sclk
 #define SCS 10 //slave select
+#define LED 2 // diagnostic LED
 
 //DRV8704's register addresses
-enum REGS : unsigned int {CTRL, TORQUE, OFF, BLANK, DECAY, RSVRD, DRIVE, STATUS};
+const int CTRL = 0x0;
+const int TORQUE = 0x1;
+const int OFF = 0x2;
+const int BLANK = 0x3;
+const int DECAY = 0x4;
+const int DRIVE = 0x6;
+const int STATUS = 0x7;
+
+// default register values for DRV (reserved bits are zeroed)
+const unsigned int initRegs[8] = {
+  0x301, // B001100000001  CTRL
+  0x0FF, // B000011111111  TORQUE
+  0x130, // B000100110000  OFF
+  0x080, // B000010000000  BLANK
+  0x010, // B000000010000  DECAY
+  0x000, // B000000000000  RESERVED register (unused)
+  0xFA5, // B111110100101  DRIVE
+  0x000, // B000000000000  STATUS
+};
 
 //store values at each register, to compare to desired values
 unsigned int currentRegisterValues[8];
-
-//**** Configure the Motor Driver's Settings ****//
-void setup(){
-
-  //Open serial monitor
-  Serial.begin(9600);
-
-  //set input and output pins
-  pinMode(SCS, OUTPUT); // active HIGH
-  pinMode(DATAOUT, OUTPUT);
-  pinMode(DATAIN, INPUT);
-  pinMode(SPICLK, OUTPUT);
-
-  //Set up SPI transaction
-  SPI.beginTransaction(SPISettings(140000, MSBFIRST, SPI_MODE0));
-
-}
 
 void spiWriteReg(unsigned int address, unsigned int value){ 
   /*
@@ -171,7 +173,7 @@ boolean checkDECAY(unsigned int actual, unsigned int desired) {
   */
 
   // check DECAY                                           and DECMOD
-  return return checkValsANDBitMask(actual, desired, 0x7F) && checkValsANDBitMask(actual, desired, 0x700);
+  return checkValsANDBitMask(actual, desired, 0x7F) && checkValsANDBitMask(actual, desired, 0x700);
 }
 
 boolean checkDRIVE(unsigned int actual, unsigned int desired) {
@@ -184,6 +186,64 @@ boolean checkDRIVE(unsigned int actual, unsigned int desired) {
   */
   // no bitmask needed
   return actual == desired;
+}
+
+boolean checkSTATUS(unsigned int actual, unsigned int desired) {
+  /*
+  Checks the STATUS register against a desired value
+
+  actual : the value of the the register (12 bits)
+  desired : the desired value of the register (12 bits)
+  returns : true if actual matches desired 
+  */
+  return checkValsANDBitMask(actual, desired, 0x3F);
+}
+
+boolean checkALL(int actualRegs[], int desiredRegs[]) {
+  return (checkCTRL(actualRegs[CTRL], desiredRegs[CTRL]) 
+          && checkTORQUE(actualRegs[TORQUE], desiredRegs[TORQUE])
+          && checkOFF(actualRegs[OFF], desiredRegs[OFF])
+          && checkBLANK(actualRegs[BLANK], desiredRegs[BLANK])
+          && checkDECAY(actualRegs[DECAY], desiredRegs[DECAY])
+          && checkDRIVE(actualRegs[DRIVE], desiredRegs[DECAY])
+          && checkSTATUS(actualRegs[STATUS], desiredRegs[STATUS]));
+          
+}
+
+void initDiagnostic(int actualRegs[], int desiredRegs[]) {
+ /*
+ If after DRV powerup, registers are not default valued, LED on pin 2 goes high
+ */
+if (checkALL(actualRegs, desiredRegs)) {
+    digitalWrite(LED, LOW);
+  } else {
+    digitalWrite(LED, HIGH);
+  }
+}
+
+//**** Configure the Motor Driver's Settings ****//
+
+void setup(){
+
+  //Open serial monitor
+  Serial.begin(9600);
+
+  //set input and output pins
+  pinMode(SCS, OUTPUT); // active HIGH
+  pinMode(DATAOUT, OUTPUT);
+  pinMode(DATAIN, INPUT);
+  pinMode(SPICLK, OUTPUT);
+  pinMode(LED, OUTPUT);
+
+  //Set up SPI transaction
+  SPI.beginTransaction(SPISettings(140000, MSBFIRST, SPI_MODE0));
+  
+  // update registers
+  spiGetCurrentRegisterValues();
+
+  // run diagnostic
+  initDiagnostic(currentRegisterValues, initRegs);
+    
 }
 
 void loop(){
