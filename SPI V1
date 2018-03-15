@@ -27,7 +27,8 @@ const int DECAY = 0x4;
 const int DRIVE = 0x6;
 const int STATUS = 0x7;
 
-unsigned int data;
+//store values at each register, to compare to desired values
+unsigned int currentRegisterValues[8];
 
  
 //**** Configure the Motor Driver's Settings ****//
@@ -55,6 +56,9 @@ void spiWriteReg(unsigned int address, unsigned int value){
 
   Args: address -> int 0xX where X <= 7, value > int to be written (as binary) to register. Only 
   lower 12 bits used. 
+
+  Example:  spiWriteReg(0x6, 0x0FF0);
+
 */
 
   //take the SCS pin high to select the chip 
@@ -75,10 +79,14 @@ void spiWriteReg(unsigned int address, unsigned int value){
 
 unsigned int spiReadReg(unsigned int address){
 /*
-  Read from a register over SPI using Arduino SPI library.
+Read from a register over SPI using Arduino SPI library.
 
-  Args: address -> int 0xX where X <= 7
-  Return: integer representing register value. 
+Args: address -> int 0xX where X <= 7
+Return: integer representing register value. 
+
+Example:  data = spiReadReg(0x6);
+
+
 */
   
   // take the SCS pin high to select the chip 
@@ -97,15 +105,26 @@ unsigned int spiReadReg(unsigned int address){
   return value;
   } 
    
+
+void spiGetCurrentRegisterValues (){
+/*
+Populate currentRegisterValues variable with the integers returned from
+spiReadReg at each memory register 0-7.
+*/
+
+  //populate currentRegisterValues array 
+  for (int i = 0; i < 7; i++){
+      read_at_index = spiReadReg(i);
+      currentRegisterValues[i] = read_at_index;
+  }    
+}
    
   
 void loop(){
 
-    //spiWriteReg(0x6, 0x0FF0);
-    //delay(100);
-    //data = spiReadReg(0x6);
 
-  }
+  
+}
 
 
   
