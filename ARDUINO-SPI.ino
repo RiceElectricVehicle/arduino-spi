@@ -135,7 +135,7 @@ boolean checkTORQUE(unsigned int actual, unsigned int desired) {
   */
   
   // check TORQUE 
-  return checkValsANDBitMask(actual, desired, 0x7F);
+  return checkValsANDBitMask(actual, desired, 0xFF);
 
 }
 
@@ -149,7 +149,7 @@ boolean checkOFF(unsigned int actual, unsigned int desired) {
   */
  
  // checks TOFF                                    and PWMMODE (should always be 1)
-  return checkValsANDBitMask(actual, desired, 0x7F) && checkValsANDBitMask(actual, 0x100, 0x100);
+  return checkValsANDBitMask(actual, desired, 0xFF) && checkValsANDBitMask(actual, 0x100, 0x100);
 }
 
 boolean checkBLANK(unsigned int actual, unsigned int desired) {
@@ -160,7 +160,7 @@ boolean checkBLANK(unsigned int actual, unsigned int desired) {
   desired : the desired value of the register (12 bits, reserved sections should be 0s)
   returns : true if actual matches desired 
   */
-  return checkValsANDBitMask(actual, desired, 0x7F);
+  return checkValsANDBitMask(actual, desired, 0xFF);
 }
 
 boolean checkDECAY(unsigned int actual, unsigned int desired) {
@@ -173,7 +173,7 @@ boolean checkDECAY(unsigned int actual, unsigned int desired) {
   */
 
   // check DECAY                                           and DECMOD
-  return checkValsANDBitMask(actual, desired, 0x7F) && checkValsANDBitMask(actual, desired, 0x700);
+  return checkValsANDBitMask(actual, desired, 0xFF) && checkValsANDBitMask(actual, desired, 0x700);
 }
 
 boolean checkDRIVE(unsigned int actual, unsigned int desired) {
