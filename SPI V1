@@ -85,8 +85,6 @@ Args: address -> int 0xX where X <= 7
 Return: integer representing register value. 
 
 Example:  data = spiReadReg(0x6);
-
-
 */
   
   // take the SCS pin high to select the chip 
@@ -123,7 +121,7 @@ spiReadReg at each memory register 0-7.
 void loop(){
 
 
-  
+
 }
 
 
