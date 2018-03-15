@@ -84,7 +84,7 @@ unsigned int spiReadReg(unsigned int address){
   
   digitalWrite(SCS, LOW); // release drv
   return value;
-  } 
+} 
    
 
 void spiGetCurrentRegisterValues (){
@@ -95,10 +95,20 @@ void spiGetCurrentRegisterValues (){
 
   //populate currentRegisterValues array 
   for (int i = 0; i < 7; i++){
-      currentRegisterValues[i] = spiRead(i);
+      currentRegisterValues[i] = spiReadReg(i);
   }    
 }
 
+boolean checkValsANDBitMask (unsigned int val1, unsigned int val2, unsigned int mask) {
+  /*
+  compares two values after ANDing them with bitmask mask.
+  */
+  if(val1 & mask == val2 & mask) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
 boolean checkCTRL(unsigned int actual, unsigned int desired) {
   /*
@@ -106,16 +116,11 @@ boolean checkCTRL(unsigned int actual, unsigned int desired) {
 
   actual : the value of the the register (12 bits)
   desired : the desired value of the register (12 bits, reserved sections should be 0)
+  returns : true if actual matches desired 
   */
   
-  // check DTIME and ISGAIN and ENBL 
-  if ((actual & 0xF00 == desired & 0xF00) && (actual & 1 == desired & 1)) {
-    return true;
-  } else {
-    return false;
-  }    
-
-
+  // check DTIME and ISGAIN                         and ENBL 
+ return checkValsANDBitMask(actual, desired, 0xF00) &&  checkValsANDBitMask(actual, desired, 0x1);
 }
    
 boolean checkTORQUE(unsigned int actual, unsigned int desired) {
@@ -124,15 +129,61 @@ boolean checkTORQUE(unsigned int actual, unsigned int desired) {
 
   actual : the value of the the register (12 bits)
   desired : the desired value of the register (12 bits, reserved sections should be 0s)
+  returns : true if actual matches desired 
   */
   
-  // check TORQUE part of TORQUE
-  if (actual & 0x7F == desired & 0x7F) {
-    return true;
-  } else {
-    return false;
-  }
+  // check TORQUE 
+  return checkValsANDBitMask(actual, desired, 0x7F);
 
+}
+
+boolean checkOFF(unsigned int actual, unsigned int desired) {
+  /*
+  Checks the OFF register against a desired value
+
+  actual : the value of the the register (12 bits)
+  desired : the desired value of the register (12 bits, reserved sections should be 0s)
+  returns : true if actual matches desired 
+  */
+ 
+ // checks TOFF                                    and PWMMODE (should always be 1)
+  return checkValsANDBitMask(actual, desired, 0x7F) && checkValsANDBitMask(actual, 0x100, 0x100);
+}
+
+boolean checkBLANK(unsigned int actual, unsigned int desired) {
+  /*
+  Checks the BLANK register against a desired value
+
+  actual : the value of the the register (12 bits)
+  desired : the desired value of the register (12 bits, reserved sections should be 0s)
+  returns : true if actual matches desired 
+  */
+  return checkValsANDBitMask(actual, desired, 0x7F);
+}
+
+boolean checkDECAY(unsigned int actual, unsigned int desired) {
+  /*
+  Checks the DECAY register against a desired value
+
+  actual : the value of the the register (12 bits)
+  desired : the desired value of the register (12 bits, reserved sections should be 0s)
+  returns : true if actual matches desired 
+  */
+
+  // check DECAY                                           and DECMOD
+  return return checkValsANDBitMask(actual, desired, 0x7F) && checkValsANDBitMask(actual, desired, 0x700);
+}
+
+boolean checkDRIVE(unsigned int actual, unsigned int desired) {
+ /*
+  Checks the DECAY register against a desired value
+
+  actual : the value of the the register (12 bits)
+  desired : the desired value of the register (12 bits)
+  returns : true if actual matches desired 
+  */
+  // no bitmask needed
+  return actual == desired;
 }
 
 void loop(){
