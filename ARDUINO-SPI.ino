@@ -12,25 +12,18 @@
  */
 
 #include <SPI.h>
-#include<Arduino.h>
+#include <Arduino.h>
 #define DATAOUT 11 //MOSI
 #define DATAIN 12 //MISO
 #define SPICLK 13//sclk
 #define SCS 10 //slave select
 
 //DRV8704's register addresses
-const int CTRL = 0x0;
-const int TORQUE = 0x1;
-const int OFF = 0x2;
-const int BLANK = 0x3;
-const int DECAY = 0x4;
-const int DRIVE = 0x6;
-const int STATUS = 0x7;
+enum REGS : unsigned int {CTRL, TORQUE, OFF, BLANK, DECAY, RSVRD, DRIVE, STATUS};
 
 //store values at each register, to compare to desired values
 unsigned int currentRegisterValues[8];
 
- 
 //**** Configure the Motor Driver's Settings ****//
 void setup(){
 
@@ -38,7 +31,7 @@ void setup(){
   Serial.begin(9600);
 
   //set input and output pins
-  pinMode(SCS, OUTPUT);
+  pinMode(SCS, OUTPUT); // active HIGH
   pinMode(DATAOUT, OUTPUT);
   pinMode(DATAIN, INPUT);
   pinMode(SPICLK, OUTPUT);
@@ -48,10 +41,8 @@ void setup(){
 
 }
 
-
-// Write to SPI addresses 
 void spiWriteReg(unsigned int address, unsigned int value){ 
-/*
+  /*
   Write to register over SPI using Arduino SPI library.
 
   Args: address -> int 0xX where X <= 7, value > int to be written (as binary) to register. Only 
@@ -59,70 +50,92 @@ void spiWriteReg(unsigned int address, unsigned int value){
 
   Example:  spiWriteReg(0x6, 0x0FF0);
 
-*/
+  */
 
-  //take the SCS pin high to select the chip 
-  digitalWrite(SCS, HIGH);
+  digitalWrite(SCS, HIGH); // select drv
 
-  //only lowest 3 bits matter in the address. Disregard others
+  // build and send 2-byte packet 
   address = address << 12;
-
-  //Write/Read bit(15) needs to be 0 for a write operation on DRV
-  address &= ~0x8000;
-  value |= address; // 16-bit data to be sent 
+  address &= ~0x8000; // set MSB to write (0)
+  value |= address;
   SPI.transfer16(value);
 
-  // take the SCS pin low to de-select the chip 
-  digitalWrite(SCS, LOW);
+  digitalWrite(SCS, LOW); // release drv
 } 
 
-
 unsigned int spiReadReg(unsigned int address){
-/*
-Read from a register over SPI using Arduino SPI library.
+  /*
+  Read from a register over SPI using Arduino SPI library.
 
-Args: address -> int 0xX where X <= 7
-Return: integer representing register value. 
+  Args: address -> int 0xX where X <= 7
+  Return: integer representing register value. 
 
-Example:  data = spiReadReg(0x6);
-
-
-*/
+  Example:  data = spiReadReg(0x6);
+  */
   
-  // take the SCS pin high to select the chip 
-  // Write/Read bit(15) needs to be 1 for a read
   unsigned int data;    
   unsigned int value;
 
-  digitalWrite(SCS, HIGH);
+  digitalWrite(SCS, HIGH); // select drv
   address = (address << 12); 
-  address |= 0x8000; //bit mask to set MSB to 1
+  address |= 0x8000; // set MSB to read (1)
   
   value = SPI.transfer16(address);  // read from address 
   
-  // take the SCS pin low to de-select the chip 
-  digitalWrite(SCS, LOW);
+  digitalWrite(SCS, LOW); // release drv
   return value;
   } 
    
 
 void spiGetCurrentRegisterValues (){
-/*
-Populate currentRegisterValues variable with the integers returned from
-spiReadReg at each memory register 0-7.
-*/
+  /*
+  Populate currentRegisterValues variable with the integers returned from
+  spiReadReg at each memory register 0-7.
+  */
 
   //populate currentRegisterValues array 
   for (int i = 0; i < 7; i++){
-      read_at_index = spiReadReg(i);
-      currentRegisterValues[i] = read_at_index;
+      currentRegisterValues[i] = spiRead(i);
   }    
 }
-   
+
+
+boolean checkCTRL(unsigned int actual, unsigned int desired) {
+  /*
+  Check the CTRL register against a desired value
+
+  actual : the value of the the register (12 bits)
+  desired : the desired value of the register (12 bits, reserved sections should be 0)
+  */
   
+  // check DTIME and ISGAIN and ENBL 
+  if ((actual & 0xF00 == desired & 0xF00) && (actual & 1 == desired & 1)) {
+    return true;
+  } else {
+    return false;
+  }    
+
+
+}
+   
+boolean checkTORQUE(unsigned int actual, unsigned int desired) {
+  /*
+  Check the TORQUE register against a desired value
+
+  actual : the value of the the register (12 bits)
+  desired : the desired value of the register (12 bits, reserved sections should be 0s)
+  */
+  
+  // check TORQUE part of TORQUE
+  if (actual & 0x7F == desired & 0x7F) {
+    return true;
+  } else {
+    return false;
+  }
+
+}
+
 void loop(){
-
-
   
 }
 
