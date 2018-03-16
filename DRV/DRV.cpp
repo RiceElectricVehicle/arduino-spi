@@ -90,7 +90,14 @@ boolean drv::spiWriteReg(unsigned int address, unsigned int value) {
 
   close(); // close comms
 
-  return confirmation == value;
+  if (confirmation == value) {
+    logger.logi("Successful write at: ");
+    logger.logi(address);
+    return true;
+  } else {
+    logger.loge("unsucessful write");
+    return false;
+  }
 
 }
 
@@ -125,10 +132,17 @@ boolean drv::checkCTRL(unsigned int actual, unsigned int desired) {
   desired : the desired value of the register (12 bits, reserved sections should be 0)
   returns : true if actual matches desired 
   */
-  
+
   // check DTIME and ISGAIN                         and ENBL 
- return checkValsANDBitMask(actual, desired, 0xF00) &&  checkValsANDBitMask(actual, desired, 0x1);
+  if (checkValsANDBitMask(actual, desired, 0xF00) &&  checkValsANDBitMask(actual, desired, 0x1)) {
+    return true;
+  } else {
+    logger.loge("CRTL register not ok");
+    return false;
+  }
 }
+
+ 
 
 boolean drv::checkTORQUE(unsigned int actual, unsigned int desired) {
   /*
@@ -140,8 +154,12 @@ boolean drv::checkTORQUE(unsigned int actual, unsigned int desired) {
   */
   
   // check TORQUE 
-  return checkValsANDBitMask(actual, desired, 0xFF);
-
+  if (checkValsANDBitMask(actual, desired, 0xFF)) {
+    return true;
+  } else {
+    logger.loge("TORQUE register not ok");
+    return false;
+  }
 }
 
 boolean drv::checkOFF(unsigned int actual, unsigned int desired) {
@@ -154,7 +172,12 @@ boolean drv::checkOFF(unsigned int actual, unsigned int desired) {
   */
  
  // checks TOFF                                    and PWMMODE (should always be 1)
-  return checkValsANDBitMask(actual, desired, 0xFF) && checkValsANDBitMask(actual, 0x100, 0x100);
+  if (checkValsANDBitMask(actual, desired, 0xFF) && checkValsANDBitMask(actual, 0x100, 0x100)) {
+    return true;
+  } else {
+    logger.loge("OFF register not ok");
+    return false;
+  }
 }
 
 boolean drv::checkBLANK(unsigned int actual, unsigned int desired) {
@@ -165,7 +188,12 @@ boolean drv::checkBLANK(unsigned int actual, unsigned int desired) {
   desired : the desired value of the register (12 bits, reserved sections should be 0s)
   returns : true if actual matches desired 
   */
-  return checkValsANDBitMask(actual, desired, 0xFF);
+  if (checkValsANDBitMask(actual, desired, 0xFF)) {
+    return true;
+  } else {
+    logger.loge("BLANK register not ok");
+    return false;
+  }
 }
 
 boolean drv::checkDECAY(unsigned int actual, unsigned int desired) {
@@ -178,9 +206,13 @@ boolean drv::checkDECAY(unsigned int actual, unsigned int desired) {
   */
 
   // check DECAY                                           and DECMOD
-  return checkValsANDBitMask(actual, desired, 0xFF) && checkValsANDBitMask(actual, desired, 0x700);
+  if (checkValsANDBitMask(actual, desired, 0xFF) && checkValsANDBitMask(actual, desired, 0x700)) {
+    return true;
+  } else {
+    logger.loge("DECAY register not ok");
+    return false;
+  }
 }
-
 boolean drv::checkDRIVE(unsigned int actual, unsigned int desired) {
  /*
   Checks the DECAY register against a desired value
@@ -190,7 +222,12 @@ boolean drv::checkDRIVE(unsigned int actual, unsigned int desired) {
   returns : true if actual matches desired 
   */
   // no bitmask needed
-  return actual == desired;
+  if (actual == desired) {
+    return true;
+  } else {
+    logger.loge("DRIVE register not ok");
+    return false;
+  } 
 }
 
 boolean drv::checkSTATUS(unsigned int actual, unsigned int desired) {
