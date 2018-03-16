@@ -12,7 +12,7 @@
                 "/Users/pugsley/Library/Arduino15/packages/arduino/hardware/avr/1.6.21/cores/arduino",
                 "/Users/pugsley/Library/Arduino15/packages/arduino/hardware/avr/1.6.21/libraries",
                 "/Users/pugsley/Library/Arduino15/packages/arduino/hardware/avr/1.6.21/libraries/SPI/src",
-                "/Users/pugsley/Documents/arduino-spi/drv"
+                "/Users/pugsley/Documents/arduino-spi/driver"
 
             ],
             "defines": [],
@@ -28,7 +28,8 @@
                     "/Users/pugsley/Library/Arduino15/packages/arduino/hardware/avr/1.6.21/cores/arduino",
                     "/Users/pugsley/Library/Arduino15/packages/arduino/hardware/avr/1.6.21/libraries",
                     "/Users/pugsley/Library/Arduino15/packages/arduino/hardware/avr/1.6.21/libraries/SPI/src",
-                    "/Users/pugsley/Documents/arduino-spi/drv"
+                    "/Users/pugsley/Documents/arduino-spi/driver"
+
                 ],
                 "limitSymbolsToIncludedHeaders": false,
                 "databaseFilename": ""

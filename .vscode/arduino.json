@@ -1,5 +1,4 @@
 {
     "board": "arduino:avr:uno",
-    "sketch": "ARDUINO-SPI.ino",
-    "output": "../build"
+    "sketch": "ARDUINO-SPI.ino"
 }

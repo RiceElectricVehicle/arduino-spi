@@ -13,8 +13,8 @@
 
 #include <SPI.h>
 #include <Arduino.h>
-#include "DRV.h"
-#include "DRV.cpp"
+#include "drv/drv.h"
+#include "drv/drv.cpp"
 #define DATAOUT 11 //MOSI
 #define DATAIN 12 //MISO
 #define SPICLK 13//sclk
@@ -22,16 +22,16 @@
 #define LED 2 // diagnostic LED
 
 //**** Configure the Motor Driver's Settings ****//
+
+ // initialize drv object
+drv sailboat(DATAOUT, DATAIN, SPICLK, SCS, LED);
 void setup(){
 
   //Open serial monitor
   Serial.begin(9600);
 
-  // initialize drv object
-  DRV sailboat(DATAOUT, DATAIN, SPICLK, SCS, LED);
-
   // run diagnostic
-  DRV.initDiagnostic(sailboat.initRegs);
+  sailboat.initDiagnostic(sailboat.initRegs);
     
 }
 
