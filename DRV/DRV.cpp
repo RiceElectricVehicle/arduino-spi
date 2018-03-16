@@ -262,11 +262,8 @@ void drv::initDiagnostic(int desiredRegs[]) {
   */
 
   spiGetCurrentRegisterValues();
-  // Serial.println(1);
-  // Serial.println(currentRegisterValues);
-  // Serial.println(checkALL(currentRegisterValues, initRegs));
 
-if (checkALL(currentRegisterValues, desiredRegs)) {
+  if (checkALL(currentRegisterValues, desiredRegs)) {
     digitalWrite(_LED, LOW);
   } else {
     logger.loge("default registers not loaded correctly");
@@ -274,7 +271,9 @@ if (checkALL(currentRegisterValues, desiredRegs)) {
   }
 }
 
+
 void drv::setLogging(char* level) {
+  // sets logging level for the drv logger
   logger.setLevel(level);
 }
   
