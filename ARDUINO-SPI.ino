@@ -32,6 +32,7 @@ void setup(){
   Serial.begin(9600);
 
   // run diagnostic
+  sailboat.setLogging("info");
   sailboat.initDiagnostic(sailboat.initRegs);
   sailboat.spiReadReg(sailboat.CTRL);
     

@@ -8,17 +8,25 @@
     "drv.setBridge(0);"
     "drv.setBridge(1);"
 
+    Dependencies:
+
+    REV Logger Library. (should be included)
+
 */
 #ifndef drv_h
 #define drv_h
 
 #include <Arduino.h>
 #include <SPI.h>
+#include "log/Logger.h"
+#include "log/Logger.cpp"
 
 class drv {
     public:
         
         drv(int out, int in, int clk, int select, int led);
+
+        void setLogging(char* level);
 
         // storage for polling all addresses
         unsigned int currentRegisterValues[8];

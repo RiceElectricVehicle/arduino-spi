@@ -2,19 +2,24 @@
 #include <Arduino.h>
 #include "drv.h"
 
-// private fields/functions:
+
+Logger logger("error");
 
 drv::drv(int out, int in, int clk, int select, int led) {
+
+
     pinMode(out, OUTPUT);
     pinMode(in, INPUT);
     pinMode(clk, OUTPUT);
     pinMode(select, OUTPUT);
     pinMode(led, OUTPUT);
+
     _MOSI = out;
     _MISO = in;
     _SCLK = clk;
     _SCS = select;
     _LED = led;
+
     unsigned int initRegs[] = {
          0x301, // B001100000001  CTRL
          0x0FF, // B000011111111  TORQUE
@@ -227,10 +232,13 @@ void drv::initDiagnostic(int desiredRegs[]) {
 if (checkALL(currentRegisterValues, desiredRegs)) {
     digitalWrite(_LED, LOW);
   } else {
-   // Serial.println("FAULT");
-   // Serial.println(_LED);
+    logger.loge("default registers not loaded correctly");
     digitalWrite(_LED, HIGH);
   }
+}
+
+void drv::setLogging(char* level) {
+  logger.setLevel(level);
 }
   
 
