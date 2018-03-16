@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "*.ino": "cpp",
-        "locale": "cpp"
+        "locale": "cpp",
+        "fstream": "cpp"
     }
 }
