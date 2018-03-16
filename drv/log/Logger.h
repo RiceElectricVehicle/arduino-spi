@@ -22,16 +22,38 @@
 class Logger {
 
     public: 
-    Logger(char* level);
+     /*
+     initializes Serial communications (baud rate: 9600)
+     */
+     Logger(char* level);
 
-    char* lvl;
+     /*
+     stores logging level
+     */
+     char* lvl;
 
-    void logi(char* message);
+     /*
+     sets logging:
+     "off" - nothing except globals
+     "error" - only errors
+     "info" - all messages
+     */
+     void setLevel(char* level);
 
-    void loge(char* message);
+     /*
+     info log message
+     */
+     void logi(char* message);
 
-    void setLevel(char* level);
+     /*
+     error log message
+     */
+     void loge(char* message);
 
+     /*
+     global log message
+     */
+     void logg(char* message);
 
 };
 

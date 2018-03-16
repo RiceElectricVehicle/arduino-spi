@@ -4,6 +4,7 @@
 
 Logger::Logger(char* level) {
     lvl = level;
+    Serial.begin(9600);
 }
 
 void Logger::setLevel(char* level) {
@@ -28,4 +29,8 @@ void Logger::loge(char* message) {
         Serial.print("ERROR: ");
         Serial.println(message);
     }
+}
+
+void Logger::logg(char* message) {
+    Serial.println(message);
 }

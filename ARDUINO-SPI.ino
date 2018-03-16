@@ -28,13 +28,10 @@ drv sailboat(DATAOUT, DATAIN, SPICLK, SCS, LED);
 
 void setup(){
 
-  //Open serial monitor
-  Serial.begin(9600);
-
   // run diagnostic
-  sailboat.setLogging("info");
-  sailboat.initDiagnostic(sailboat.initRegs);
-  sailboat.spiReadReg(sailboat.CTRL);
+  sailboat.setLogging("off");
+  sailboat.regDiagnostic(sailboat.initRegs);
+  sailboat.read(sailboat.CTRL);
     
 }
 

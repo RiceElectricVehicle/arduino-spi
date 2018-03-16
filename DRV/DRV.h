@@ -25,27 +25,7 @@ class drv {
     public:
         
         drv(int out, int in, int clk, int select, int led);
-
-        void setLogging(char* level);
-
-        // storage for polling all addresses
-        unsigned int currentRegisterValues[8];
-
-        // default register values
-        unsigned int initRegs[];
-
         
-       
-        void initDiagnostic(int desiredRegs[]);
-
-        // const int TORQUE;
-        // const int OFF;
-        // const int BLANK;
-        // const int DECAY;
-        // const int DRIVE;
-        // const int STATUS;
-        
-
         // pins
         int _MOSI;
         int _MISO;
@@ -55,7 +35,6 @@ class drv {
         
         
         // register addresses
-
         const int CTRL = 0x0;
         const int TORQUE = 0x1;
         const int OFF = 0x2;
@@ -64,34 +43,49 @@ class drv {
         const int DRIVE = 0x6;
         const int STATUS = 0x7;
 
+        unsigned int currentRegisterValues[8];
 
+        // Default reg values
+        unsigned int initRegs[];
+
+        // functions 
+        
+        /*
+        opens SPI bus
+        */
         void open();
 
+        /*
+        closes SPI bus
+        */
         void close();
-
-        unsigned int spiReadReg(unsigned int adress);
-
-        boolean spiWriteReg(unsigned int address, unsigned int value);
-
-        void spiGetCurrentRegisterValues();
-
-        boolean checkValsANDBitMask(unsigned int val1, unsigned int val2, unsigned int mask);
-
-        boolean checkCTRL(unsigned int actual, unsigned int desired);
-
-        boolean checkTORQUE(unsigned int actual, unsigned int desired);
-
-        boolean checkOFF(unsigned int actual, unsigned int desired);
-
-        boolean checkBLANK(unsigned int actual, unsigned int desired);
         
-        boolean checkDECAY(unsigned int actual, unsigned int desired);
+        /*
+        reads from given address
+        */
+        unsigned int read(unsigned int address);
 
-        boolean checkDRIVE(unsigned int actual, unsigned int desired);
+        /*
+        writes value to address
+        returns true if successful
+        */
+        boolean write(unsigned int address, unsigned int value);
+        
+        /*
+        sets logging level for DRV logger object (see Logger.h)
+        */
+        void setLogging(char* level);
+        
+        /*
+        reads all registers and stores in currentRegisterValues
+        */
+        void getCurrentRegisters();
 
-        boolean checkSTATUS(unsigned int actual, unsigned int desired);
+        /*
+        confirms that all Regs have desired values
+        */
+        void regDiagnostic(int desiredRegs[]);
 
-        boolean checkALL(int actualRegs[], int desiredRegs[]);
     
 };
 
