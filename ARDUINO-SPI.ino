@@ -25,6 +25,7 @@
 
  // initialize drv object
 drv sailboat(DATAOUT, DATAIN, SPICLK, SCS, LED);
+
 void setup(){
 
   //Open serial monitor
@@ -32,10 +33,13 @@ void setup(){
 
   // run diagnostic
   sailboat.initDiagnostic(sailboat.initRegs);
+  sailboat.spiReadReg(sailboat.CTRL);
     
 }
 
 void loop(){
+
+  //sailboat.spiReadReg(sailboat.CTRL);
   
 }
 

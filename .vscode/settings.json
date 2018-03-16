@@ -21,6 +21,8 @@
         "unordered_set": "cpp",
         "vector": "cpp",
         "rope": "cpp",
-        "slist": "cpp"
+        "slist": "cpp",
+        "__locale": "cpp",
+        "ios": "cpp"
     }
 }

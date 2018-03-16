@@ -1,6 +1,13 @@
 /*
     Drv.h - Library for communicating with a DRV8704
     Created by REV for SEM. March 15, 2018
+
+    Usage:
+    declare a drv object "drv sailboat(11, 12, 13, 10, 2);"
+    use publilc methods:
+    "drv.setBridge(0);"
+    "drv.setBridge(1);"
+
 */
 #ifndef drv_h
 #define drv_h
@@ -23,25 +30,31 @@ class drv {
        
         void initDiagnostic(int desiredRegs[]);
 
-        const int TORQUE;
-        const int OFF;
-        const int BLANK;
-        const int DECAY;
-        const int DRIVE;
-        const int STATUS;
+        // const int TORQUE;
+        // const int OFF;
+        // const int BLANK;
+        // const int DECAY;
+        // const int DRIVE;
+        // const int STATUS;
         
-   
-    private:
 
         // pins
-        const int _MOSI;
-        const int _MISO;
-        const int _SCLK;
-        const int _SCS;
-        const int _LED;
-        const int CTRL;
+        int _MOSI;
+        int _MISO;
+        int _SCLK;
+        int _SCS;
+        int _LED;
+        
         
         // register addresses
+
+        const int CTRL = 0x0;
+        const int TORQUE = 0x1;
+        const int OFF = 0x2;
+        const int BLANK = 0x3;
+        const int DECAY = 0x4;
+        const int DRIVE = 0x6;
+        const int STATUS = 0x7;
 
 
         void open();

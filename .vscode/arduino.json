@@ -1,4 +1,5 @@
 {
     "board": "arduino:avr:uno",
-    "sketch": "ARDUINO-SPI.ino"
+    "sketch": "ARDUINO-SPI.ino",
+    "port": "/dev/cu.usbmodem1441"
 }

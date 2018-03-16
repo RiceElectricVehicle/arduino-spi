@@ -10,10 +10,11 @@ drv::drv(int out, int in, int clk, int select, int led) {
     pinMode(clk, OUTPUT);
     pinMode(select, OUTPUT);
     pinMode(led, OUTPUT);
-    const int _MOSI = out;
-    const int _SCLK = clk;
-    const int _SCS = select;
-    const int _LED = led;
+    _MOSI = out;
+    _MISO = in;
+    _SCLK = clk;
+    _SCS = select;
+    _LED = led;
     unsigned int initRegs[] = {
          0x301, // B001100000001  CTRL
          0x0FF, // B000011111111  TORQUE
@@ -27,13 +28,6 @@ drv::drv(int out, int in, int clk, int select, int led) {
     
     unsigned int currentRegisterValues[8];
 
-    const int CTRL = 0x0;
-    const int TORQUE = 0x1;
-    const int OFF = 0x2;
-    const int BLANK = 0x3;
-    const int DECAY = 0x4;
-    const int DRIVE = 0x6;
-    const int STATUS = 0x7;
 }
 
 // short hand to initialize spi comms
@@ -226,10 +220,15 @@ void drv::initDiagnostic(int desiredRegs[]) {
   */
 
   spiGetCurrentRegisterValues();
+  // Serial.println(1);
+  // Serial.println(currentRegisterValues);
+  // Serial.println(checkALL(currentRegisterValues, initRegs));
 
 if (checkALL(currentRegisterValues, desiredRegs)) {
     digitalWrite(_LED, LOW);
   } else {
+   // Serial.println("FAULT");
+   // Serial.println(_LED);
     digitalWrite(_LED, HIGH);
   }
 }
