@@ -25,7 +25,7 @@ class Logger {
      /*
      initializes Serial communications (baud rate: 9600)
      */
-     Logger(char* tag, char* level);
+     Logger(char* tagg, char* level);
 
      /*
      stores logging level
@@ -64,6 +64,12 @@ class Logger {
      logging for Setter functions of DRV
      if success : logs info - "TAG - reg register subreg setting write success"
      else : logs error - "TAG - reg register subreg setting write fail"
+    
+     Usage:
+        bool success = drv.write(CTRL, value));
+        logSet("CTRL", "ENBL", "on", success);
+    
+
      */
      bool logSet(char* reg, char* subreg, char* setting, bool success);
 

@@ -268,11 +268,8 @@ bool drv::write(unsigned int address, unsigned int value) {
   close(); // close comms
 
   if (confirmation == value) {
-    logger.logi("Successful write at: ");
-    logger.logi(address);
     return true;
   } else {
-    logger.loge("unsucessful write");
     return false;
   }
 
@@ -324,9 +321,13 @@ bool drv::setHbridge(char* value) {
     outgoing = current | 0x001; // set bit 0
   } else {
     outgoing = current; // do nothing
+    logger.loge("ENBL set: invalid input");
+    return false;
   }
 
-  return write(CTRL, outgoing);
+  bool success = write(CTRL, outgoing);
+
+  return logger.logSet("CTRL", "ENBL", value, success);
 }
 
 bool drv::setISGain(int value) {
@@ -345,9 +346,13 @@ bool drv::setISGain(int value) {
     outgoing = current | 0x300; // set bits 9-8
   } else {
     outgoing = current; // do nothing
+    logger.loge("ISGAIN set: invalid input");
+    return false;
   }
 
-  return write(CTRL, outgoing);
+  bool success = write(CTRL, outgoing);
+
+  return logger.logSet("CTRL", "ISGAIN", value, success);
 }
 
 bool drv::setDTime(int value) {
@@ -366,9 +371,12 @@ bool drv::setDTime(int value) {
     outgoing = current | 0xC00; // set bits 11-10
   } else {
     outgoing = current; // do nothing
+    logger.loge("DTIME set: invalid input");
   }
 
-  return write(CTRL, outgoing);
+  bool success = write(CTRL, outgoing);
+
+  return logger.logSet("CTRL", "DTIME", value, success);
 }
 
 bool drv::setTorque(unsigned int value) {
@@ -380,9 +388,12 @@ bool drv::setTorque(unsigned int value) {
     outgoing |= value; // set bits 7-0
   } else {
     outgoing = current; // do nothing
+    logger.loge("TORQUE set: invalid input");
+    return false;
   }
 
-  return write(TORQUE, outgoing);
+  bool success = write(TORQUE, outgoing);
+  return logger.logSet("TORQUE", "TORQUE", value, success);
 }
 
 bool drv::setTOff(unsigned int value) {
@@ -394,9 +405,12 @@ bool drv::setTOff(unsigned int value) {
     outgoing |= value; // set bits 7-0
   } else {
     outgoing = current; // do nothing
+    logger.loge("TOFF set: invalid input");
+    return false;
   }
-
-  return write(OFF, outgoing);  
+  
+  bool success = write(OFF, outgoing);
+  return logger.logSet("OFF", "TOFF", value, success);
 }
 
 bool drv::setTBlank(unsigned int value) {
@@ -408,9 +422,12 @@ bool drv::setTBlank(unsigned int value) {
     outgoing |= value; // set bits 7-0
   } else {
     outgoing = current; // do nothing
+    logger.loge("TBLANK set: invalid input");
+    return false;
   }
 
-  return write(BLANK, outgoing); 
+  bool success = write(BLANK, outgoing);
+  return logger.logSet("BLANK", "TBLANK", value, success);
 }
 
 bool drv::setTDecay(unsigned int value) {
@@ -422,9 +439,12 @@ bool drv::setTDecay(unsigned int value) {
     outgoing |= value; // set bits 7-0
   } else {
     outgoing = current; // do nothing
+    logger.loge("TDECAY set: invalid input");
+    return false;
   }
-
-  return write(DECAY, outgoing);
+  
+  bool success = write(DECAY, outgoing);
+  return logger.logSet("DECAY", "TDECAY", value, success);
 }
 
 bool drv::setDecMode(char* value) {
@@ -444,9 +464,12 @@ bool drv::setDecMode(char* value) {
     outgoing |= 0x500; // set bits 10 and 8
   } else {
     outgoing = current; // do nothing
+    logger.loge("DECMOD set: invalid input");
+    return false;
   }
 
-  return write(DECAY, outgoing);
+  bool success = write(DECAY, outgoing);
+  return logger.logSet("DECAY", "DECMOD", value, success);
 }
 
 bool drv::setOCPThresh(int value) {
@@ -465,9 +488,12 @@ bool drv::setOCPThresh(int value) {
     outgoing = current | 0x003; // set bits 1-0
   } else {
     outgoing = current;
+    logger.loge("OCPTH set: invalid input");
+    return false;
   }
-
-  return write(DRIVE, outgoing);
+  
+  bool success = write(DRIVE, outgoing);
+  return logger.logSet("DRIVE", "OCPTH", value, success);
 }
 
 bool drv::setOCPDeglitchTime(float value) {
@@ -486,9 +512,12 @@ bool drv::setOCPDeglitchTime(float value) {
     outgoing = current | 0x00C; // set bits 3-2
   } else {
     outgoing = current;
+    logger.loge("OCPDEG set: invalid input");
+    return false;
   }
 
-  return write(DRIVE, outgoing);
+  bool success = write(DRIVE, outgoing);
+  return logger.logSet("DRIVE", "OCPTH", value, success);
 }
 
 bool drv::setGDSinkTime(int value) {
@@ -507,9 +536,12 @@ bool drv::setGDSinkTime(int value) {
     outgoing = current | 0x030; // set bits 5-4
   } else {
     outgoing = current;
+    logger.loge("TDRIVEN set: invalid input");
+    return false;
   }
 
-  return write(DRIVE, outgoing);
+  bool success = write(DRIVE, outgoing);
+  return logger.logSet("DRIVE", "TDRIVEN", value, success);
 }
 
 bool drv::setGDSourceTime(int value) {
@@ -528,9 +560,12 @@ bool drv::setGDSourceTime(int value) {
     outgoing = current | 0x0C0; // set bits 7-6
   } else {
     outgoing = current;
+    logger.loge("TDRIVEP set: invalid input");
+    return false;
   }
-
-  return write(DRIVE, outgoing);
+  
+  bool success = write(DRIVE, outgoing);
+  return logger.logSet("DRIVE", "TDRIVEP", value, success);
 }
 
 bool drv::setGDSinkPkCurrent(int value) {
@@ -549,9 +584,12 @@ bool drv::setGDSinkPkCurrent(int value) {
     outgoing = current | 0x300; // set bits 9-8
   } else {
     outgoing = current;
+    logger.loge("IDRIVEN set: invalid input");
+    return false;
   }
 
-  return write(DRIVE, outgoing);
+  bool success = write(DRIVE, outgoing);
+  return logger.logSet("DRIVE", "IDRIVEN", value, success);
 }
 
 bool drv::setGDSourcePkCurrent(int value) {
@@ -570,9 +608,12 @@ bool drv::setGDSourcePkCurrent(int value) {
     outgoing = current | 0xC00; // set bits 11-10
   } else {
     outgoing = current;
+    logger.loge("IDRIVEP set: invalid input");
+    return false;
   }
 
-  return write(DRIVE, outgoing);
+  bool success = write(DRIVE, outgoing);
+  return logger.logSet("DRIVE", "IDRIVEP", value, success);
 }
 
 // *** GETTERS ***
