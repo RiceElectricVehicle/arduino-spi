@@ -1,6 +1,7 @@
 /*
     Drv.h - Library for communicating with a DRV8704
-    Created by REV for SEM. March 15, 2018
+    Created by Sergio Mauricio Guerrero & Louis Smidt for SEM. 
+    March 15, 2018
 
     Usage:
     declare a drv object "drv sailboat(11, 12, 13, 10, 2);"
@@ -86,6 +87,9 @@ class drv {
         desiredRegs[]: array with 7 entries each with 12 bit values (one for each reg)
         */
         void regDiagnostic(int desiredRegs[]);
+
+        
+        // *** SETTERS ***
 
 
         // following funcs deal with CTRL register
@@ -222,6 +226,40 @@ class drv {
         returns true if successful
         */
         bool setGDSourcePkCurrent(int value);
+
+        // *** GETTERS ***
+
+        char* getHbridge();
+
+        int getISGain();
+
+        int getDTime();
+
+        unsigned int getTorque();
+
+        unsigned int getTOff();
+
+        unsigned int getTBlank();
+
+        unsigned int getTDecay();
+
+        char* getDecMode();
+
+        int getOCPThresh();
+
+        float getOCPDeglitchTime();
+
+        int getGDSinkTime();
+
+        int getGDSourceTime();
+
+        int getGDSinkPkCurrent();
+
+        int getGDSourcePkCurrent();
+
+
+
+
 
 
 

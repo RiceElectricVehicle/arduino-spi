@@ -1,6 +1,6 @@
 /*
   Drv.h - Library for communicating with a DRV8704
-  Created by REV for SEM. March 15, 2018
+  Created by Sergio Mauricio Guerrero & Louis Smidt for REV. March 15, 2018
 
   Usage:
     declare a drv object "drv sailboat(11, 12, 13, 10, 2);"
@@ -510,7 +510,7 @@ bool drv::setGDSinkTime(int value) {
   return write(DRIVE, outgoing);
 }
 
-bool drv::GDSourceTime(int value) {
+bool drv::setGDSourceTime(int value) {
   unsigned int current = read(DRIVE);
   unsigned int outgoing;
 
@@ -531,7 +531,7 @@ bool drv::GDSourceTime(int value) {
   return write(DRIVE, outgoing);
 }
 
-bool drv::GDSinkPkCurrent(int value) {
+bool drv::setGDSinkPkCurrent(int value) {
   unsigned int current = read(DRIVE);
   unsigned int outgoing;
 
@@ -552,7 +552,7 @@ bool drv::GDSinkPkCurrent(int value) {
   return write(DRIVE, outgoing);
 }
 
-bool drv::GDSourcePkCurrent(int value) {
+bool drv::setGDSourcePkCurrent(int value) {
   unsigned int current = read(DRIVE);
   unsigned int outgoing;
 
@@ -572,4 +572,6 @@ bool drv::GDSourcePkCurrent(int value) {
 
   return write(DRIVE, outgoing);
 }
+
+
  
