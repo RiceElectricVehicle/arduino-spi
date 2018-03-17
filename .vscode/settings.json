@@ -23,6 +23,16 @@
         "rope": "cpp",
         "slist": "cpp",
         "__locale": "cpp",
-        "ios": "cpp"
+        "ios": "cpp",
+        "atomic": "cpp",
+        "system_error": "cpp",
+        "*.tcc": "cpp",
+        "hashtable": "cpp",
+        "__functional_base": "cpp",
+        "istream": "cpp",
+        "memory": "cpp",
+        "tuple": "cpp",
+        "utility": "cpp",
+        "functional": "cpp"
     }
 }

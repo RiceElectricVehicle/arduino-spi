@@ -312,6 +312,8 @@ void drv::setLogging(char* level) {
   logger.setLevel(level);
 }
 
+// *** SETTERS ***
+
 bool drv::setHbridge(char* value) {
   unsigned int current = read(CTRL);
   unsigned int outgoing;
@@ -573,5 +575,187 @@ bool drv::setGDSourcePkCurrent(int value) {
   return write(DRIVE, outgoing);
 }
 
+// *** GETTERS ***
 
- 
+char* drv::getHbridge() {
+  unsigned int current = read(CTRL) & 0x001;
+  char* get = "none";
+
+  if (current == 0) {
+    get = "off";
+  } else if (current == 1) {
+    get = "on";
+  }
+
+  return get;
+}
+
+int drv::getISGain() {
+  unsigned int current = read(CTRL) & 0x300;
+  int get = 0;
+
+  if (current == 0x000) {
+    get = 5;
+  } else if (current == 0x100) {
+    get = 10;
+  } else if (current == 0x200) {
+    get = 20;
+  } else if (current == 0x300) {
+    get = 40;
+  }
+
+  return get;
+}
+
+int drv::getDTime() {
+  unsigned int current = read(CTRL) & 0xC00;
+  int get = 0;
+
+  if (current == 0x000) {
+    get = 410;
+  } else if (current == 0x400) {
+    get = 460;
+  } else if (current == 0x800) {
+    get = 670;
+  } else if (current == 0xC00) {
+    get = 880;
+  }
+
+  return get;
+}
+
+unsigned int drv::getTorque() {
+  return read(TORQUE) & 0x0FF;
+}
+
+unsigned int drv::getTOff() {
+  return read(OFF) & 0x0FF;
+}
+
+unsigned int drv::getTBlank() {
+  return read(BLANK) & 0x0FF;
+}
+
+unsigned int drv::getTDecay() {
+  return read(DECAY) & 0x0FF;
+}
+
+char* drv::getDecMode() {
+  unsigned int current = read(DECAY) & 0x700;
+  char* get = "none";
+
+  if (current == 0x000) {
+    get = "slow";
+  } else if (current == 0x200) {
+    get = "fast";
+  } else if (current == 0x300) {
+    get = "mixed";
+  } else if (current == 0x500) {
+    get = "auto";
+  }
+
+  return get;
+}
+
+int drv::getOCPThresh() {
+  unsigned int current = read(DRIVE) & 0x003;
+  int get = 0;
+
+  if (current == 0x000) {
+    get = 250;
+  } else if (current == 0x001) {
+    get = 500;
+  } else if (current == 0x002) {
+    get = 750;
+  } else if (current == 0x003) {
+    get = 1000;
+  }
+
+  return get;
+}
+
+float drv::getOCPDeglitchTime() {
+  unsigned int current = read(DRIVE) & 0x00C;
+  float get = 0;
+
+  if (current == 0x000) {
+    get = 1.05;
+  } else if (current == 0x002) {
+    get = 2.1;
+  } else if (current == 0x004) {
+    get = 4.2;
+  } else if (current == 0x00C) {
+    get = 8.4;
+  }
+
+  return get;
+
+}
+
+int drv::getGDSinkTime() {
+  unsigned int current = read(DRIVE) & 0x030;
+  int get = 0;
+
+  if (current == 0x000) {
+    get = 263;
+  } else if (current == 0x010) {
+    get = 525;
+  } else if (current == 0x020) {
+    get = 1050;
+  } else if (current == 0x030) {
+    get = 2100;
+  }
+
+  return get;
+}
+
+int drv::getGDSourceTime() {
+  unsigned int current = read(DRIVE) & 0x0C0;
+  int get = 0;
+
+  if (current == 0x000) {
+    get = 263;
+  } else if (current == 0x040) {
+    get = 525;
+  } else if (current == 0x080) {
+    get = 1050;
+  } else if (current == 0x0C0) {
+    get = 2100;
+  }
+
+  return get;
+}
+
+int drv::getGDSinkPkCurrent() {
+  unsigned int current = read(DRIVE) & 0x300;
+  int get = 0;
+
+  if (current == 0x000) {
+    get = 100;
+  } else if (current == 0x100) {
+    get = 200;
+  } else if (current == 0x200) {
+    get = 300;
+  } else if (current == 0x300) {
+    get = 400;
+  }
+
+  return get;
+}
+
+int drv::getGDSourcePkCurrent() {
+  unsigned int current = read(DRIVE) & 0xC00;
+  int get = 0;
+
+  if (current == 0x000) {
+    get = 50;
+  } else if (current == 0x400) {
+    get = 100;
+  } else if (current == 0x800) {
+    get = 150;
+  } else if (current == 0xC00) {
+    get = 200;
+  }
+
+  return get;
+}
