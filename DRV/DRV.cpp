@@ -320,6 +320,8 @@ boolean drv::setHbridge(char* value) {
     outgoing = current & ~0x001; // clear bit 0
   } else if (value == "on") {
     outgoing = current | 0x001; // set bit 0
+  } else {
+    outgoing = current; // do nothing
   }
 
   return write(CTRL, outgoing);
@@ -339,6 +341,8 @@ boolean drv::setISGain(int value) {
     outgoing &= ~0x100; // clear bit 8
   } else if (value == 40) {
     outgoing = current | 0x300; // set bits 9-8
+  } else {
+    outgoing = current; // do nothing
   }
 
   return write(CTRL, outgoing);
@@ -358,6 +362,8 @@ boolean drv::setDTime(int value) {
     outgoing &= ~0x400; // clear bit 10
   } else if (value == 880) {
     outgoing = current | 0xC00; // set bits 11-10
+  } else {
+    outgoing = current; // do nothing
   }
 
   return write(CTRL, outgoing);
@@ -370,7 +376,23 @@ boolean drv::setTorque(int value) {
   if(value <= 255 && value >= 0) {
     outgoing = current & 0xF00; // clear bits 7-0
     outgoing |= value; // set bits 7-0
+  } else {
+    outgoing = current; // do nothing
   }
-  
+
   return write(TORQUE, outgoing);
+}
+
+boolean drv::setToff(int value) {
+  unsigned int current = read(OFF);
+  unsigned int outgoing;
+
+  if(value <= 255 && value >= 0) {
+    outgoing = current & 0xF00; // clear bits 7-0
+    outgoing |= value; // set bits 7-0
+  } else {
+    outgoing = current; // do nothing
+  }
+
+  return write(OFF, outgoing);  
 }

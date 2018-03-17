@@ -121,11 +121,22 @@ class drv {
 
         /*
         sets TORQUE register
-        value: 0-255 - Sets full-scale output current for both H-bridges
+        value: 0-255 - Sets full-scale output current for both H-bridges (255 default)
         returns true if successful
         */
         boolean setTorque(int value);
-        
+
+        // following func deals with TOFF register (only TOFF, PWMMODE shouldnt be modified)
+
+        /*
+        sets TOFF register
+        value: 0-255 - Sets fixed off time, in increments of 525 ns
+            0 - 525 ns
+            48 - default
+            255 - 133.8 us
+        returns true if successful
+        */
+        boolean setToff(int value);
     
 };
 
