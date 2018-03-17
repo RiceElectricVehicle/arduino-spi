@@ -69,7 +69,7 @@ class drv {
         writes value to address
         returns true if successful
         */
-        boolean write(unsigned int address, unsigned int value);
+        bool write(unsigned int address, unsigned int value);
         
         /*
         sets logging level for DRV logger object (see Logger.h)
@@ -97,7 +97,7 @@ class drv {
             "off" ("on" default)
         returns true if successful
         */
-        boolean setHbridge(char* value);
+        bool setHbridge(char* value);
 
         /*
         sets ISGAIN register
@@ -106,7 +106,7 @@ class drv {
             10/20/40 (40 default)
         returns true if successful
         */
-        boolean setISGain(int value);
+        bool setISGain(int value);
 
         /*
         sets DTIME register
@@ -115,7 +115,7 @@ class drv {
             460/670/880 (410 default)
         returns true if successful
         */
-        boolean setDTime(int value);
+        bool setDTime(int value);
 
         // following func deals with TORQUE register
 
@@ -124,9 +124,9 @@ class drv {
         value: 0-255 - Sets full-scale output current for both H-bridges (255 default)
         returns true if successful
         */
-        boolean setTorque(int value);
+        bool setTorque(unsigned int value);
 
-        // following func deals with TOFF register (only TOFF, PWMMODE shouldnt be modified)
+        // following func deals with OFF register (only TOFF, PWMMODE shouldnt be modified)
 
         /*
         sets TOFF register
@@ -136,7 +136,26 @@ class drv {
             255 - 133.8 us
         returns true if successful
         */
-        boolean setToff(int value);
+        bool setTOff(unsigned int value);
+
+        // following func deals with BLANK register
+
+        /*
+        sets TBLANK register
+        value: 0-255 - Sets current trip blanking time, in increments of 21 ns (128 default)
+        returns true if successful
+        */
+        bool setTBlank(unsigned int value);
+
+        // following funcs deal with DECAY register
+
+        /*
+        sets TDECAY register
+        value: 0-255 - Sets mixed decay transition time, in increments of 525 ns (16 default)
+        returns true if successful
+        */
+        bool setTDecay(unsigned int value);
+
     
 };
 

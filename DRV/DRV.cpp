@@ -73,7 +73,7 @@ PRIVATE INTERNALS
 */
 
 // functions to check registers
-boolean checkValsANDBitMask (unsigned int val1, unsigned int val2, unsigned int mask) {
+bool checkValsANDBitMask (unsigned int val1, unsigned int val2, unsigned int mask) {
   /*
   compares two values after ANDing them with bitmask mask.
   */
@@ -84,7 +84,7 @@ boolean checkValsANDBitMask (unsigned int val1, unsigned int val2, unsigned int 
   }
 }
 
-boolean checkCTRL(unsigned int actual, unsigned int desired) {
+bool checkCTRL(unsigned int actual, unsigned int desired) {
   /*
   Check the CTRL register against a desired value
 
@@ -102,7 +102,7 @@ boolean checkCTRL(unsigned int actual, unsigned int desired) {
   }
 }
 
-boolean checkTORQUE(unsigned int actual, unsigned int desired) {
+bool checkTORQUE(unsigned int actual, unsigned int desired) {
   /*
   Check the TORQUE register against a desired value
 
@@ -120,7 +120,7 @@ boolean checkTORQUE(unsigned int actual, unsigned int desired) {
   }
 }
 
-boolean checkOFF(unsigned int actual, unsigned int desired) {
+bool checkOFF(unsigned int actual, unsigned int desired) {
   /*
   Checks the OFF register against a desired value
 
@@ -138,7 +138,7 @@ boolean checkOFF(unsigned int actual, unsigned int desired) {
   }
 }
 
-boolean checkBLANK(unsigned int actual, unsigned int desired) {
+bool checkBLANK(unsigned int actual, unsigned int desired) {
   /*
   Checks the BLANK register against a desired value
 
@@ -154,7 +154,7 @@ boolean checkBLANK(unsigned int actual, unsigned int desired) {
   }
 }
 
-boolean checkDECAY(unsigned int actual, unsigned int desired) {
+bool checkDECAY(unsigned int actual, unsigned int desired) {
   /*
   Checks the DECAY register against a desired value
 
@@ -172,7 +172,7 @@ boolean checkDECAY(unsigned int actual, unsigned int desired) {
   }
 }
 
-boolean checkDRIVE(unsigned int actual, unsigned int desired) {
+bool checkDRIVE(unsigned int actual, unsigned int desired) {
  /*
   Checks the DECAY register against a desired value
 
@@ -189,7 +189,7 @@ boolean checkDRIVE(unsigned int actual, unsigned int desired) {
   } 
 }
 
-boolean checkSTATUS(unsigned int actual, unsigned int desired) {
+bool checkSTATUS(unsigned int actual, unsigned int desired) {
   /*
   Checks the STATUS register against a desired value
 
@@ -200,7 +200,7 @@ boolean checkSTATUS(unsigned int actual, unsigned int desired) {
   return checkValsANDBitMask(actual, desired, 0x3F);
 }
 
-boolean checkALL(int actualRegs[], int desiredRegs[]) {
+bool checkALL(int actualRegs[], int desiredRegs[]) {
   return (checkCTRL(actualRegs[CTRL], desiredRegs[CTRL]) 
           && checkTORQUE(actualRegs[TORQUE], desiredRegs[TORQUE])
           && checkOFF(actualRegs[OFF], desiredRegs[OFF])
@@ -244,7 +244,7 @@ unsigned int drv::read(unsigned int address) {
     return value;
 }
 
-boolean drv::write(unsigned int address, unsigned int value) {
+bool drv::write(unsigned int address, unsigned int value) {
  /*
   Write to register over SPI using Arduino SPI library.
 
@@ -312,7 +312,7 @@ void drv::setLogging(char* level) {
   logger.setLevel(level);
 }
 
-boolean drv::setHbridge(char* value) {
+bool drv::setHbridge(char* value) {
   unsigned int current = read(CTRL);
   unsigned int outgoing;
 
@@ -327,7 +327,7 @@ boolean drv::setHbridge(char* value) {
   return write(CTRL, outgoing);
 }
 
-boolean drv::setISGain(int value) {
+bool drv::setISGain(int value) {
   unsigned int current = read(CTRL);
   unsigned int outgoing;
 
@@ -348,7 +348,7 @@ boolean drv::setISGain(int value) {
   return write(CTRL, outgoing);
 }
 
-boolean drv::setDTime(int value) {
+bool drv::setDTime(int value) {
   unsigned int current = read(CTRL);
   unsigned int outgoing;
   
@@ -369,7 +369,7 @@ boolean drv::setDTime(int value) {
   return write(CTRL, outgoing);
 }
 
-boolean drv::setTorque(int value) {
+bool drv::setTorque(unsigned int value) {
   unsigned int current = read(TORQUE);
   unsigned int outgoing;
 
@@ -383,7 +383,7 @@ boolean drv::setTorque(int value) {
   return write(TORQUE, outgoing);
 }
 
-boolean drv::setToff(int value) {
+bool drv::setToff(unsigned int value) {
   unsigned int current = read(OFF);
   unsigned int outgoing;
 
@@ -396,3 +396,32 @@ boolean drv::setToff(int value) {
 
   return write(OFF, outgoing);  
 }
+
+bool drv::setTBlank(unsigned int value) {
+  unsigned int current = read(BLANK);
+  unsigned int outgoing;
+
+  if(value <= 255 && value >= 0) {
+    outgoing = current & 0xF00; // clear bits 7-0
+    outgoing |= value; // set bits 7-0
+  } else {
+    outgoing = current; // do nothing
+  }
+
+  return write(BLANK, outgoing); 
+}
+
+bool drv::setTDecay(unsigned int value) {
+  unsigned int current = read(DECAY);
+  unsigned int outgoing;
+
+  if(value <= 255 && value >= 0) {
+    outgoing = current & 0xF00; // clear bits 7-0
+    outgoing |= value; // set bits 7-0
+  } else {
+    outgoing = current; // do nothing
+  }
+
+  return write(DECAY, outgoing);
+}
+ 
