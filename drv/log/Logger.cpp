@@ -1,3 +1,18 @@
+/*
+    Logger.h - simple logging library for REV projects
+
+    Created by REV for SEM. March 16, 2018
+
+    Outputs log messages to serial port
+
+    Usage:
+    initialize a Logger object:
+    Logger logger(char* level);
+    logger.setLevel(error/info/off);
+    logger.logi("info message");
+    logger.loge("error message");
+
+*/
 #include<Arduino.h>
 #include"Logger.h"
 
