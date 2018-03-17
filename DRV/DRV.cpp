@@ -306,6 +306,9 @@ void drv::regDiagnostic(int desiredRegs[]) {
 void drv::setLogging(char* level) {
   // sets logging level for the drv logger
   logger.setLevel(level);
+  Serial.println("REV - DRV8704 driver loaded");
+  Serial.print("DRV8704 - Log level set: ");
+  Serial.println(level);
 }
 
 // *** SETTERS ***
