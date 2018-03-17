@@ -2,7 +2,8 @@
 #include"Logger.h"
 
 
-Logger::Logger(char* level) {
+Logger::Logger(char* tag, char* level) {
+    tag = tag;
     lvl = level;
     Serial.begin(9600);
 }
@@ -19,18 +20,23 @@ void Logger::setLevel(char* level) {
 
 void Logger::logi(char* message) {
     if (lvl == "info") {
-        Serial.print("INFO: ");
+        Serial.print(tag);
+        Serial.print(" - INFO: ");
         Serial.println(message);
     }
 }
 
 void Logger::loge(char* message) {
     if (lvl == "info" || lvl == "error") {
-        Serial.print("ERROR: ");
+        Serial.print(tag);
+        Serial.print(" - ERROR: ");
         Serial.println(message);
     }
 }
 
 void Logger::logg(char* message) {
+    Serial.print(tag);
+    Serial.print(" - GLOBAL: ")
     Serial.println(message);
 }
+

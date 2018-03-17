@@ -19,8 +19,8 @@
 #include <Arduino.h>
 #include "drv.h"
 
-// initialize logging object to error
-Logger logger("error");
+// initialize logging object
+Logger logger("DRV8704", "info");
 
 // register addresses (for internal functions)
 const int CTRL = 0x0;

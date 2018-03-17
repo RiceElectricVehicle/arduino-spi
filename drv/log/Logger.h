@@ -25,12 +25,14 @@ class Logger {
      /*
      initializes Serial communications (baud rate: 9600)
      */
-     Logger(char* level);
+     Logger(char* tag, char* level);
 
      /*
      stores logging level
      */
      char* lvl;
+
+     char* tag;
 
      /*
      sets logging:
@@ -54,6 +56,24 @@ class Logger {
      global log message
      */
      void logg(char* message);
+
+
+     // DRV Specific Functions
+
+     /*
+     logging for Setter functions of DRV
+     if success : logs info - "TAG - reg register subreg setting write success"
+     else : logs error - "TAG - reg register subreg setting write fail"
+     */
+     bool logSet(char* reg, char* subreg, char* setting, bool success);
+
+     bool logSet(char* reg, char* subreg, int setting, bool success);
+
+     bool logSet(char* reg, char* subreg, float setting, bool success);
+
+     bool logSet(char* reg, char* subreg, unsigned int setting, bool success);
+
+
 
 };
 
