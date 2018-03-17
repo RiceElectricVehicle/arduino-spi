@@ -156,6 +156,17 @@ class drv {
         */
         bool setTDecay(unsigned int value);
 
+        /*
+        sets DECMODE register
+        value: 
+            "slow" - force slow decay at all times (default)
+            "fast" - force fast decay at all times
+            "mixed" - use mixed decay at all times
+            "auto" - use auto mixed decay at all times
+        returns true if successful
+        */
+        bool setDecMode(char* value);
+
     
 };
 

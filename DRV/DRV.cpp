@@ -424,4 +424,27 @@ bool drv::setTDecay(unsigned int value) {
 
   return write(DECAY, outgoing);
 }
+
+bool drv::setDecMode(char* value) {
+  unsigned int current = read(DECAY);
+  unsigned int outgoing;
+
+  if(value == "slow") {
+    outgoing = current & ~0x700;// clear bits 10-8
+  } else if (value == "fast") {
+    outgoing = current & ~0x700; // clear bits 10-8
+    outgoing |= 0x200; // set bit 9
+  } else if (value == "mixed") {
+    outgoing = current & ~0x700; // clear bits 10-8
+    outgoing |= 0x300; // set bits 9-8
+  } else if (value == "auto") {
+    outgoing = current & ~0x700; // clear bits 10-8
+    outgoing |= 0x500; // set bits 10 and 8
+  } else {
+    outgoing = current; // do nothing
+  }
+
+  return write(DECAY, outgoing);
+}
+
  
