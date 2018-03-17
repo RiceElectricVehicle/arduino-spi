@@ -360,4 +360,17 @@ boolean drv::setDTime(int value) {
     outgoing = current | 0xC00; // set bits 11-10
   }
 
+  return write(CTRL, outgoing);
+}
+
+boolean drv::setTorque(int value) {
+  unsigned int current = read(TORQUE);
+  unsigned int outgoing;
+
+  if(value <= 255 && value >= 0) {
+    outgoing = current & 0xF00; // clear bits 7-0
+    outgoing |= value; // set bits 7-0
+  }
+  
+  return write(TORQUE, outgoing);
 }

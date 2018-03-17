@@ -93,7 +93,7 @@ class drv {
         /*
         sets ENBL register
         value: 
-            "on" turns on h-bridge
+            "on" - turns on h-bridge
             "off" ("on" default)
         returns true if successful
         */
@@ -102,7 +102,7 @@ class drv {
         /*
         sets ISGAIN register
         value: 
-            5 sets ISGAIN gain to 5 V/V
+            5 - sets ISENSE amplifier gain to 5 V/V
             10/20/40 (40 default)
         returns true if successful
         */
@@ -111,11 +111,21 @@ class drv {
         /*
         sets DTIME register
         value:
-            410 sets dead time to 410 ns
+            410 - sets dead time to 410 ns
             460/670/880 (410 default)
         returns true if successful
         */
         boolean setDTime(int value);
+
+        // following func deals with TORQUE register
+
+        /*
+        sets TORQUE register
+        value: 0-255 - Sets full-scale output current for both H-bridges
+        returns true if successful
+        */
+        boolean setTorque(int value);
+        
     
 };
 
