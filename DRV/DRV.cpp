@@ -264,15 +264,14 @@ bool drv::write(unsigned int address, unsigned int value) {
   SPI.transfer16(packet);
 
   unsigned int confirmation = read(address); // read sent data
-
   close(); // close comms
+ 
+  // Serial.print("confirmation: ");
+  // Serial.println(confirmation);
+  // Serial.print("value: ");
+  // Serial.println(value);
 
-  if (confirmation == value) {
-    return true;
-  } else {
-    return false;
-  }
-
+  return confirmation == value;
 }
 
 void drv::getCurrentRegisters (){

@@ -49,14 +49,18 @@ bool Logger::logSet(char* reg, char* subreg, char* setting, bool success) {
         Serial.print(tag);
         Serial.print(" - INFO: ");
         Serial.print(reg);
-        Serial.print(" register subreg ");
+        Serial.print(" register, ");
+        Serial.print(subreg);
+        Serial.print(" subregister, ");
         Serial.print(setting);
         Serial.println(" write success");
     } else if(!success && (lvl == "error" || lvl == "info")) {
         Serial.print(tag);
-        Serial.print(" - ");
+        Serial.print(" - ERROR: ");
         Serial.print(reg);
-        Serial.print(" register subreg ERROR: ");
+        Serial.print(" register, ");
+        Serial.print(subreg);
+        Serial.print(" subregister, ");
         Serial.print(setting);
         Serial.println(" write fail");
     }
@@ -70,14 +74,18 @@ bool Logger::logSet(char* reg, char* subreg, int setting, bool success){
         Serial.print(tag);
         Serial.print(" - INFO: ");
         Serial.print(reg);
-        Serial.print(" register subreg ");
+        Serial.print(" register, ");
+        Serial.print(subreg);
+        Serial.print(" subregister, ");
         Serial.print(setting);
         Serial.println(" write success");
     } else if(!success && (lvl == "error" || lvl == "info")) {
         Serial.print(tag);
         Serial.print(" - ERROR: ");
         Serial.print(reg);
-        Serial.print(" register subreg ");
+        Serial.print(" register, ");
+        Serial.print(subreg);
+        Serial.print(" subregister, ");
         Serial.print(setting);
         Serial.println(" write fail");
     }
@@ -91,14 +99,18 @@ bool Logger::logSet(char* reg, char* subreg, float setting, bool success){
         Serial.print(tag);
         Serial.print(" - INFO: ");
         Serial.print(reg);
-        Serial.print(" register subreg ");
+        Serial.print(" register, ");
+        Serial.print(subreg);
+        Serial.print(" subregister, ");
         Serial.print(setting);
         Serial.println(" write success");
     } else if(!success && (lvl == "error" || lvl == "info")) {
         Serial.print(tag);
         Serial.print(" - ERROR: ");
         Serial.print(reg);
-        Serial.print(" register subreg ");
+        Serial.print(" register, ");
+        Serial.print(subreg);
+        Serial.print(" subregister, ");
         Serial.print(setting);
         Serial.println(" write fail");
     }
@@ -112,14 +124,18 @@ bool Logger::logSet(char* reg, char* subreg, unsigned int setting, bool success)
         Serial.print(tag);
         Serial.print(" - INFO: ");
         Serial.print(reg);
-        Serial.print(" register subreg ");
+        Serial.print(" register, ");
+        Serial.print(subreg);
+        Serial.print(" subregister, ");
         Serial.print(setting);
         Serial.println(" write success");
     } else if(!success && (lvl == "error" || lvl == "info")) {
         Serial.print(tag);
         Serial.print(" - ERROR: ");
         Serial.print(reg);
-        Serial.print(" register subreg ");
+        Serial.print(" register, ");
+        Serial.print(subreg);
+        Serial.print(" subregister, ");
         Serial.print(setting);
         Serial.println(" write fail");
     }

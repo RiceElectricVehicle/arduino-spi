@@ -32,7 +32,8 @@ void setup(){
   sailboat.setLogging("info");
   sailboat.regDiagnostic(sailboat.initRegs);
   sailboat.read(sailboat.CTRL);
-  sailboat.setHbridge("off");
+  sailboat.setHbridge("on");
+  sailboat.setISGain(10);
     
 }
 
