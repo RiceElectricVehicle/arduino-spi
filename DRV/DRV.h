@@ -167,7 +167,65 @@ class drv {
         */
         bool setDecMode(char* value);
 
-    
+        // following funcs deal with DRIVE register
+
+        /*
+        sets OCPTH register
+        value:
+            250 - sets OCP threshold to 250 mV
+            500/750/1000 (500 default)
+        returns true if successful
+        */
+        bool setOCPThresh(int value);
+
+        /*
+        sets OCPDEG register 
+        value:
+            1.05 - sets OCP deglitch time to 1.05 us
+            2.1/4.2/8.4 (2.1 default)
+        returns true if successful
+        */
+        bool setOCPDeglitchTime(float value);
+
+        /*
+        sets TDRIVEN register
+        value:
+            263 - sets Gate drive sink time to 263 ns
+            525/1050/2100 (1050 default)
+        returns true if successful
+        */
+        bool setGDSinkTime(int value);
+        
+        /*
+        sets TDRIVEP register
+        value:
+            263 - sets Gate drive source time to 263 ns
+            525/1050/2100 (1050 default)
+        returns true if successful
+        */
+        bool setGDSourceTime(int value);
+
+        /*
+        sets IDRIVEN register
+        value:
+            100 - sets Gate drive peak sink current to 100 mA
+            200/300/400 (400 default)
+        returns true if successful
+        */
+        bool setGDSinkPkCurrent(int value);
+
+        /*
+        sets IDRIVEP register
+        value:
+            50 - sets Gate drive peak source current to 50 mA
+            100/150/200 (200 default)
+        returns true if successful
+        */
+        bool setGDSourcePkCurrent(int value);
+
+
+
+        
 };
 
 #endif

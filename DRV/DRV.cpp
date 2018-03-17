@@ -383,7 +383,7 @@ bool drv::setTorque(unsigned int value) {
   return write(TORQUE, outgoing);
 }
 
-bool drv::setToff(unsigned int value) {
+bool drv::setTOff(unsigned int value) {
   unsigned int current = read(OFF);
   unsigned int outgoing;
 
@@ -447,4 +447,129 @@ bool drv::setDecMode(char* value) {
   return write(DECAY, outgoing);
 }
 
+bool drv::setOCPThresh(int value) {
+  unsigned int current = read(DRIVE);
+  unsigned int outgoing;
+
+  if (value == 250) {
+    outgoing = current & ~0x003; // clear bits 1-0
+  } else if (value == 500) {
+    outgoing = current & ~0x003; // clear bits 1-0
+    outgoing |= 0x001; // set bit 0
+  } else if (value == 750) {
+    outgoing = current & ~0x003; // clear bits 1-0
+    outgoing |= 0x002; // set bit 1
+  } else if (value == 1000) {
+    outgoing = current | 0x003; // set bits 1-0
+  } else {
+    outgoing = current;
+  }
+
+  return write(DRIVE, outgoing);
+}
+
+bool drv::setOCPDeglitchTime(float value) {
+  unsigned int current = read(DRIVE);
+  unsigned int outgoing;
+
+  if (value == 1.05) {
+    outgoing = current & ~0x00C; // clear bits 3-2
+  } else if (value == 2.1) {
+    outgoing = current & ~0x00C; // clear bits 3-2
+    outgoing |= 0x004; // set bit 2
+  } else if (value == 4.2) {
+    outgoing = current & ~0x00C; // clear bits 3-2
+    outgoing |= 0x008; // set bit 3
+  } else if (value == 8.4) {
+    outgoing = current | 0x00C; // set bits 3-2
+  } else {
+    outgoing = current;
+  }
+
+  return write(DRIVE, outgoing);
+}
+
+bool drv::setGDSinkTime(int value) {
+  unsigned int current = read(DRIVE);
+  unsigned int outgoing;
+
+  if (value == 263) {
+    outgoing = current & ~0x030; // clear bits 5-4
+  } else if (value == 525) {
+    outgoing = current & ~0x030; // clear bits 5-4
+    outgoing |= 0x010; // set bit 4
+  } else if (value == 1050) {
+    outgoing = current & ~0x030; // clear bits 5-4
+    outgoing |= 0x020; // set bit 5
+  } else if (value == 2100) {
+    outgoing = current | 0x030; // set bits 5-4
+  } else {
+    outgoing = current;
+  }
+
+  return write(DRIVE, outgoing);
+}
+
+bool drv::GDSourceTime(int value) {
+  unsigned int current = read(DRIVE);
+  unsigned int outgoing;
+
+  if (value == 263) {
+    outgoing = current & ~0x0C0; // clear bits 7-6
+  } else if (value == 525) {
+    outgoing = current & ~0x0C0; // clear bits 7-6
+    outgoing |= 0x040; // set bit 6
+  } else if (value == 1050) {
+    outgoing = current & ~0x0C0; // clear bits 7-6
+    outgoing |= 0x080; // set bit 7
+  } else if (value == 2100) {
+    outgoing = current | 0x0C0; // set bits 7-6
+  } else {
+    outgoing = current;
+  }
+
+  return write(DRIVE, outgoing);
+}
+
+bool drv::GDSinkPkCurrent(int value) {
+  unsigned int current = read(DRIVE);
+  unsigned int outgoing;
+
+  if (value == 100) {
+    outgoing = current & ~0x300; // clear bits 9-8
+  } else if (value == 200) {
+    outgoing = current & ~0x300; // clear bits 9-8
+    outgoing |= 0x100; // set bit 8
+  } else if (value == 300) {
+    outgoing = current & ~0x300; // clear bits 9-8
+    outgoing |= 0x200; // set bit 9
+  } else if (value == 400) {
+    outgoing = current | 0x300; // set bits 9-8
+  } else {
+    outgoing = current;
+  }
+
+  return write(DRIVE, outgoing);
+}
+
+bool drv::GDSourcePkCurrent(int value) {
+  unsigned int current = read(DRIVE);
+  unsigned int outgoing;
+
+  if (value == 50) {
+    outgoing = current & ~0xC00; // clear bits 11-10
+  } else if (value == 100) {
+    outgoing = current & ~0xC00; // clear bits 11-10
+    outgoing |= 0x400; // set bit 8
+  } else if (value == 150) {
+    outgoing = current & ~0xC00; // clear bits 11-10
+    outgoing |= 0x800; // set bit 9
+  } else if (value == 200) {
+    outgoing = current | 0xC00; // set bits 11-10
+  } else {
+    outgoing = current;
+  }
+
+  return write(DRIVE, outgoing);
+}
  
