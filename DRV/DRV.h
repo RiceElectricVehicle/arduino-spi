@@ -83,9 +83,39 @@ class drv {
 
         /*
         confirms that all Regs have desired values
+        desiredRegs[]: array with 7 entries each with 12 bit values (one for each reg)
         */
         void regDiagnostic(int desiredRegs[]);
 
+
+        // following funcs deal with CTRL register
+
+        /*
+        sets ENBL register
+        value: 
+            "on" turns on h-bridge
+            "off" ("on" default)
+        returns true if successful
+        */
+        boolean setHbridge(char* value);
+
+        /*
+        sets ISGAIN register
+        value: 
+            5 sets ISGAIN gain to 5 V/V
+            10/20/40 (40 default)
+        returns true if successful
+        */
+        boolean setISGain(int value);
+
+        /*
+        sets DTIME register
+        value:
+            410 sets dead time to 410 ns
+            460/670/880 (410 default)
+        returns true if successful
+        */
+        boolean setDTime(int value);
     
 };
 

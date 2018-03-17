@@ -1,3 +1,20 @@
+/*
+  Drv.h - Library for communicating with a DRV8704
+  Created by REV for SEM. March 15, 2018
+
+  Usage:
+    declare a drv object "drv sailboat(11, 12, 13, 10, 2);"
+  use publilc methods:
+    "drv.setBridge("on");"
+    "drv.setBridge("off");"
+
+  Dependencies:
+
+    REV Logger Library. (should be included)
+
+  ** see drv.h for full doc **
+
+*/
 #include <SPI.h>
 #include <Arduino.h>
 #include "drv.h"
@@ -51,7 +68,11 @@ drv::drv(int out, int in, int clk, int select, int led) {
   
 }
 
-// private internal funcs
+/*
+PRIVATE INTERNALS
+*/
+
+// functions to check registers
 boolean checkValsANDBitMask (unsigned int val1, unsigned int val2, unsigned int mask) {
   /*
   compares two values after ANDing them with bitmask mask.
@@ -190,16 +211,14 @@ boolean checkALL(int actualRegs[], int desiredRegs[]) {
           
 }
 
-// TODO : build functions to toggle settings via simple calls: drv.setDTIME(0/1/2/3). drv.setDECMODE("auto")
-// public funcs
-
-// short hand to initialize spi comms
+/*
+PUBLIC FUNCTIONS
+*/
 void drv::open() {
     SPI.beginTransaction(SPISettings(140000, MSBFIRST, SPI_MODE0));
     digitalWrite(_SCS, HIGH);
 }
 
-// short hand to end spi comms
 void drv::close() {
     digitalWrite(_SCS, LOW);
     SPI.endTransaction();
@@ -288,8 +307,57 @@ void drv::regDiagnostic(int desiredRegs[]) {
   }
 }
 
-
 void drv::setLogging(char* level) {
   // sets logging level for the drv logger
   logger.setLevel(level);
+}
+
+boolean drv::setHbridge(char* value) {
+  unsigned int current = read(CTRL);
+  unsigned int outgoing;
+
+  if (value == "off") {
+    outgoing = current & ~0x001; // clear bit 0
+  } else if (value == "on") {
+    outgoing = current | 0x001; // set bit 0
+  }
+
+  return write(CTRL, outgoing);
+}
+
+boolean drv::setISGain(int value) {
+  unsigned int current = read(CTRL);
+  unsigned int outgoing;
+
+  if (value == 5) {
+    outgoing = current & ~0x300; // clear bits 9-8
+  } else if (value == 10) {
+    outgoing = current | 0x100; // set bit 8
+    outgoing &= ~0x200; // clear bit 9
+  } else if (value == 20) {
+    outgoing = current | 0x200; // set bit 9
+    outgoing &= ~0x100; // clear bit 8
+  } else if (value == 40) {
+    outgoing = current | 0x300; // set bits 9-8
+  }
+
+  return write(CTRL, outgoing);
+}
+
+boolean drv::setDTime(int value) {
+  unsigned int current = read(CTRL);
+  unsigned int outgoing;
+  
+  if (value == 410) {
+    outgoing = current & ~0xC00; // clear bits 11-10
+  } else if (value == 460) {
+    outgoing = current | 0x400; // set bit 10
+    outgoing &= ~0x800; // clear bit 11
+  } else if (value == 670) {
+    outgoing = current | 0x800; // set bit 11
+    outgoing &= ~0x400; // clear bit 10
+  } else if (value == 880) {
+    outgoing = current | 0xC00; // set bits 11-10
+  }
+
 }
