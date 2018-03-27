@@ -18,6 +18,7 @@
 #include <SPI.h>
 #include <Arduino.h>
 #include "drv.h"
+#include "Logger.h"
 
 // initialize logging object
 Logger logger("DRV8704", "info");
@@ -242,6 +243,25 @@ unsigned int drv::read(unsigned int address) {
     
     close(); // close comms
     return value;
+}
+
+void drv::writeTest(unsigned int address, unsigned int value) {
+  
+  unsigned int packet;
+
+  open(); // open comms
+  address = address << 12; // build packet skelleton
+  address &= ~0x8000; // set MSB to write (0)
+  packet = address | value;
+
+  SPI.transfer16(packet);
+  close(); // close comms
+ 
+  // Serial.print("confirmation: ");
+  // Serial.println(confirmation);
+  // Serial.print("value: ");
+  // Serial.println(value);
+
 }
 
 bool drv::write(unsigned int address, unsigned int value) {

@@ -19,8 +19,6 @@
 
 #include <Arduino.h>
 #include <SPI.h>
-#include "log/Logger.h"
-#include "log/Logger.cpp"
 
 class drv {
     public:
@@ -71,6 +69,8 @@ class drv {
         returns true if successful
         */
         bool write(unsigned int address, unsigned int value);
+
+        void writeTest(unsigned int address, unsigned int value);
         
         /*
         sets logging level for DRV logger object (see Logger.h)

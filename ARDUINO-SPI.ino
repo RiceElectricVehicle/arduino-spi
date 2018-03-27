@@ -13,8 +13,7 @@
 
 #include <SPI.h>
 #include <Arduino.h>
-#include "drv/drv.h"
-#include "drv/drv.cpp"
+#include "drv.h"
 #define DATAOUT 11 //MOSI
 #define DATAIN 12 //MISO
 #define SPICLK 13//sclk
@@ -38,8 +37,8 @@ void setup(){
 }
 
 void loop(){
-
-  //sailboat.spiReadReg(sailboat.CTRL);
+  //sailboat.writeTest(sailboat.TORQUE, 0x010);
+  delay(250);
   
 }
 
