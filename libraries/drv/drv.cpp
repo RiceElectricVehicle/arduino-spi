@@ -35,16 +35,6 @@ const int STATUS = 0x7;
 // constructor
 drv::drv(int out, int in, int clk, int select, int led) {
 
-  // hello world
-  logger.logg("DRV8704 driver loaded");
-
-  // set up pins
-  pinMode(out, OUTPUT);
-  pinMode(in, INPUT);
-  pinMode(clk, OUTPUT);
-  pinMode(select, OUTPUT);
-  pinMode(led, OUTPUT);
-
   // pins
   _MOSI = out;
   _MISO = in;
@@ -235,34 +225,15 @@ unsigned int drv::read(unsigned int address) {
      Example:  data = spiReadReg(0x6);
     */ 
     unsigned int value;
-    open(); // init comms
     address = address << 12; // allocate zeros for data
     address |= 0x8000; // set MSB to read (1)
-
+    open();
     value = SPI.transfer16(address); // transfer read request, recieve data
+    close();
     
-    close(); // close comms
     return value;
 }
 
-void drv::writeTest(unsigned int address, unsigned int value) {
-  
-  unsigned int packet;
-
-  open(); // open comms
-  address = address << 12; // build packet skelleton
-  address &= ~0x8000; // set MSB to write (0)
-  packet = address | value;
-
-  SPI.transfer16(packet);
-  close(); // close comms
- 
-  // Serial.print("confirmation: ");
-  // Serial.println(confirmation);
-  // Serial.print("value: ");
-  // Serial.println(value);
-
-}
 
 bool drv::write(unsigned int address, unsigned int value) {
  /*
@@ -280,9 +251,10 @@ bool drv::write(unsigned int address, unsigned int value) {
   address = address << 12; // build packet skelleton
   address &= ~0x8000; // set MSB to write (0)
   packet = address | value;
-
   SPI.transfer16(packet);
-
+  close();
+  delay(5);
+  open();
   unsigned int confirmation = read(address); // read sent data
   close(); // close comms
  

@@ -13,32 +13,40 @@
 
 #include <SPI.h>
 #include <Arduino.h>
-#include "drv.h"
-#define DATAOUT 11 //MOSI
-#define DATAIN 12 //MISO
-#define SPICLK 13//sclk
-#define SCS 10 //slave select
+#include "libraries/drv/drv.h"
+#include "libraries/drv/drv.cpp"
+#define MOSI 11 //MOSI
+#define MISO 12 //MISO
+#define CLK 13//sclk
+#define SCS 8 //slave select
 #define LED 2 // diagnostic LED
 
 //**** Configure the Motor Driver's Settings ****//
 
  // initialize drv object
-drv sailboat(DATAOUT, DATAIN, SPICLK, SCS, LED);
+drv sailboat(MOSI, MISO, CLK, SCS, LED);
 
 void setup(){
   Serial.begin(9600);
+
+  pinMode(SCS, OUTPUT); pinMode(MOSI, OUTPUT); pinMode(MISO, OUTPUT); pinMode(CLK, OUTPUT);
+  pinMode(10, OUTPUT);
+  digitalWrite(SCS, LOW); 
+
+  
   // run diagnostic
   sailboat.setLogging("info");
-  sailboat.regDiagnostic(sailboat.initRegs);
-  sailboat.read(sailboat.CTRL);
-  sailboat.setHbridge("on");
-  sailboat.setISGain(10);
+  // sailboat.regDiagnostic(sailboat.initRegs);
+  // sailboat.read(sailboat.CTRL);
+  // sailboat.setHbridge("on");
+  // sailboat.setISGain(10); 
+
     
 }
 
 void loop(){
-  //sailboat.writeTest(sailboat.TORQUE, 0x010);
-  delay(250);
+  sailboat.write(0x00, 0x400 );
+  //delay(250);
   
 }
 

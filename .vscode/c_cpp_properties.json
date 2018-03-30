@@ -14,7 +14,6 @@
                 "/Users/pugsley/Library/Arduino15/packages/arduino/hardware/avr/1.6.21/libraries/SPI/src",
                 "/Users/pugsley/Documents/arduino-spi/drv",
                 "/Users/pugsley/Documents/arduino-spi/drv/log"
-
             ],
             "defines": [],
             "intelliSenseMode": "clang-x64",
@@ -31,7 +30,6 @@
                     "/Users/pugsley/Library/Arduino15/packages/arduino/hardware/avr/1.6.21/libraries/SPI/src",
                     "/Users/pugsley/Documents/arduino-spi/drv",
                     "/Users/pugsley/Documents/arduino-spi/drv/log"
-
                 ],
                 "limitSymbolsToIncludedHeaders": false,
                 "databaseFilename": ""
@@ -39,7 +37,10 @@
             "macFrameworkPath": [
                 "/System/Library/Frameworks",
                 "/Library/Frameworks"
-            ]
+            ],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c11",
+            "cppStandard": "c++17"
         },
         {
             "name": "Linux",
