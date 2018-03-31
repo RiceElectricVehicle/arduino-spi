@@ -225,7 +225,9 @@ class drv {
         */
         bool setIDriveP(int value);
 
+
         // *** GETTERS ***
+        // all getters return the value one would pass the corresponding setter
 
         char* getHbridge();
 
@@ -254,6 +256,24 @@ class drv {
         int getIDriveN();
 
         int getIDriveP();
+
+        
+        /*
+        Returns bits 0-5 of STATUS register
+        */
+        unsigned int getFault();
+
+                
+        /*
+        clears a Fault if there is one.
+        value: OTS - over temp                  (0) (auto clear)
+            AOCP - Channel A over current       (1)
+            BOCP - Channel B "      "           (2)
+            APDF - Channel A predriver fault    (3)
+            BPDF - Channel B "         "        (4)
+            UVLO - Undervoltage                 (5) (auto clear)
+        */
+        void clearFault(int value);
 
 
 

@@ -784,3 +784,11 @@ int drv::getIDriveP() {
 
   return get;
 }
+
+unsigned int drv::getFault() {
+  return read(STATUS) & 0x03F;
+}
+
+void drv::clearFault(int value) {
+  write(STATUS, 0<<value); 
+}
