@@ -226,6 +226,7 @@ class drv {
         bool setIDriveP(int value);
 
 
+
         // *** GETTERS ***
         // all getters return the value one would pass the corresponding setter
 
@@ -256,7 +257,6 @@ class drv {
         int getIDriveN();
 
         int getIDriveP();
-
         
         /*
         Returns bits 0-5 of STATUS register
@@ -274,12 +274,6 @@ class drv {
             UVLO - Undervoltage                 (5) (auto clear)
         */
         void clearFault(int value);
-
-
-
-
-
-
 
         
 };
