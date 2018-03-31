@@ -68,7 +68,7 @@ bool checkValsANDBitMask (unsigned int val1, unsigned int val2, unsigned int mas
   /*
   compares two values after ANDing them with bitmask mask.
   */
-  if(val1 & mask == val2 & mask) {
+    if(val1 & mask == val2 & mask) {
     return true;
   } else {
     return false;
@@ -714,7 +714,6 @@ float drv::getOCPDeglitchTime() {
   }
 
   return get;
-
 }
 
 int drv::getTDriveN() {
@@ -783,4 +782,12 @@ int drv::getIDriveP() {
   }
 
   return get;
+}
+
+unsigned int drv::getFault() {
+  return read(STATUS) & 0x03F;
+}
+
+void drv::clearFault(int value) {
+  write(STATUS, 0<<value); 
 }
