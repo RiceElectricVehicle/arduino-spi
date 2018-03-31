@@ -261,12 +261,15 @@ class drv {
         /*
         Returns bits 0-5 of STATUS register
         */
-        unsigned int getFault();
+  
+        void getFault();
+
 
                 
         /*
         clears a Fault if there is one.
         value: OTS - over temp                  (0) (auto clear)
+            AOCP - Channel A over current       (1)     
             AOCP - Channel A over current       (1)
             BOCP - Channel B "      "           (2)
             APDF - Channel A predriver fault    (3)
