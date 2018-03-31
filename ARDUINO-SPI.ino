@@ -15,11 +15,12 @@
 #include <Arduino.h>
 #include "libraries/drv/drv.h"
 #include "libraries/drv/drv.cpp"
-#define MOSI 11 //MOSI
-#define MISO 12 //MISO
-#define CLK 13//sclk
-#define SCS 8 //slave select
+#define MOSI 11 
+#define MISO 12 
+#define CLK 13
+#define SCS 8 
 #define LED 2 // diagnostic LED
+#define SLEEP 7
 
 //**** Configure the Motor Driver's Settings ****//
 
@@ -32,7 +33,8 @@ void setup(){
   pinMode(SCS, OUTPUT); pinMode(MOSI, OUTPUT); pinMode(MISO, OUTPUT); pinMode(CLK, OUTPUT);
   pinMode(10, OUTPUT);
   digitalWrite(SCS, LOW); 
-
+  pinMode(SLEEP, OUTPUT);
+  digitalWrite(SLEEP, HIGH);
   
   // run diagnostic
   sailboat.setLogging("info");
@@ -40,12 +42,15 @@ void setup(){
   // sailboat.read(sailboat.CTRL);
   // sailboat.setHbridge("on");
   // sailboat.setISGain(10); 
+  delay(1000);
+  sailboat.setHbridge("off");
+  //sailboat.setISGain(10);
 
     
 }
 
 void loop(){
-  sailboat.write(0x00, 0x400 );
+  sailboat.read(0x00);
   //delay(250);
   
 }

@@ -68,9 +68,7 @@ class drv {
         writes value to address
         returns true if successful
         */
-        bool write(unsigned int address, unsigned int value);
-
-        void writeTest(unsigned int address, unsigned int value);
+        void write(unsigned int address, unsigned int value);
         
         /*
         sets logging level for DRV logger object (see Logger.h)
@@ -198,7 +196,7 @@ class drv {
             525/1050/2100 (1050 default)
         returns true if successful
         */
-        bool setGDSinkTime(int value);
+        bool setTDriveN(int value);
         
         /*
         sets TDRIVEP register
@@ -207,7 +205,7 @@ class drv {
             525/1050/2100 (1050 default)
         returns true if successful
         */
-        bool setGDSourceTime(int value);
+        bool setTDriveP(int value);
 
         /*
         sets IDRIVEN register
@@ -216,7 +214,7 @@ class drv {
             200/300/400 (400 default)
         returns true if successful
         */
-        bool setGDSinkPkCurrent(int value);
+        bool setIDriveN(int value);
 
         /*
         sets IDRIVEP register
@@ -225,7 +223,7 @@ class drv {
             100/150/200 (200 default)
         returns true if successful
         */
-        bool setGDSourcePkCurrent(int value);
+        bool setIDriveP(int value);
 
         // *** GETTERS ***
 
@@ -249,13 +247,13 @@ class drv {
 
         float getOCPDeglitchTime();
 
-        int getGDSinkTime();
+        int getTDriveN();
 
-        int getGDSourceTime();
+        int getTDriveP();
 
-        int getGDSinkPkCurrent();
+        int getIDriveN();
 
-        int getGDSourcePkCurrent();
+        int getIDriveP();
 
 
 

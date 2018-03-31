@@ -206,13 +206,13 @@ bool checkALL(int actualRegs[], int desiredRegs[]) {
 PUBLIC FUNCTIONS
 */
 void drv::open() {
-    SPI.beginTransaction(SPISettings(140000, MSBFIRST, SPI_MODE0));
     digitalWrite(_SCS, HIGH);
+  SPI.beginTransaction(SPISettings(140000, MSBFIRST, SPI_MODE0));  
 }
 
 void drv::close() {
-    digitalWrite(_SCS, LOW);
     SPI.endTransaction();
+  digitalWrite(_SCS, LOW);
 }
 
 unsigned int drv::read(unsigned int address) {
@@ -235,35 +235,24 @@ unsigned int drv::read(unsigned int address) {
 }
 
 
-bool drv::write(unsigned int address, unsigned int value) {
+void drv::write(unsigned int address, unsigned int value) {
  /*
   Write to register over SPI using Arduino SPI library.
 
-  address : int 0xX where X <= 7, 
+  address : int 0xX where X <= 0x7, 
   value : int to be written (as binary) to register. (12 bits)
   returns : true if write successful, false otherwise
   Example:  spiWriteReg(0x6, 0x0FF0);
 
   */
-  unsigned int packet;
+  unsigned int packet=0;
 
-  open(); // open comms
   address = address << 12; // build packet skelleton
   address &= ~0x8000; // set MSB to write (0)
   packet = address | value;
+  open();  // open comms
   SPI.transfer16(packet);
-  close();
-  delay(5);
-  open();
-  unsigned int confirmation = read(address); // read sent data
-  close(); // close comms
- 
-  // Serial.print("confirmation: ");
-  // Serial.println(confirmation);
-  // Serial.print("value: ");
-  // Serial.println(value);
-
-  return confirmation == value;
+  close(); // close
 }
 
 void drv::getCurrentRegisters (){
@@ -307,6 +296,7 @@ void drv::setLogging(char* level) {
 
 bool drv::setHbridge(char* value) {
   unsigned int current = read(CTRL);
+  Serial.println(current);
   unsigned int outgoing;
 
   if (value == "off") {
@@ -319,9 +309,9 @@ bool drv::setHbridge(char* value) {
     return false;
   }
 
-  bool success = write(CTRL, outgoing);
+  write(CTRL, outgoing);
 
-  return logger.logSet("CTRL", "ENBL", value, success);
+  return logger.logSet("CTRL", "ENBL", value, getHbridge() == value);
 }
 
 bool drv::setISGain(int value) {
@@ -343,10 +333,10 @@ bool drv::setISGain(int value) {
     logger.loge("ISGAIN set: invalid input");
     return false;
   }
+  
+  write(CTRL, outgoing);
 
-  bool success = write(CTRL, outgoing);
-
-  return logger.logSet("CTRL", "ISGAIN", value, success);
+  return logger.logSet("CTRL", "ISGAIN", value, getISGain() == value);
 }
 
 bool drv::setDTime(int value) {
@@ -368,9 +358,9 @@ bool drv::setDTime(int value) {
     logger.loge("DTIME set: invalid input");
   }
 
-  bool success = write(CTRL, outgoing);
+  write(CTRL, outgoing);
 
-  return logger.logSet("CTRL", "DTIME", value, success);
+  return logger.logSet("CTRL", "DTIME", value, getDTime() == value);
 }
 
 bool drv::setTorque(unsigned int value) {
@@ -386,8 +376,8 @@ bool drv::setTorque(unsigned int value) {
     return false;
   }
 
-  bool success = write(TORQUE, outgoing);
-  return logger.logSet("TORQUE", "TORQUE", value, success);
+  write(TORQUE, outgoing);
+  return logger.logSet("TORQUE", "TORQUE", value, getTorque() == value);
 }
 
 bool drv::setTOff(unsigned int value) {
@@ -403,8 +393,8 @@ bool drv::setTOff(unsigned int value) {
     return false;
   }
   
-  bool success = write(OFF, outgoing);
-  return logger.logSet("OFF", "TOFF", value, success);
+  write(OFF, outgoing);
+  return logger.logSet("OFF", "TOFF", value, getTOff() == value);
 }
 
 bool drv::setTBlank(unsigned int value) {
@@ -419,9 +409,9 @@ bool drv::setTBlank(unsigned int value) {
     logger.loge("TBLANK set: invalid input");
     return false;
   }
-
-  bool success = write(BLANK, outgoing);
-  return logger.logSet("BLANK", "TBLANK", value, success);
+  
+  write(BLANK, outgoing);
+  return logger.logSet("BLANK", "TBLANK", value, getTBlank() == value);
 }
 
 bool drv::setTDecay(unsigned int value) {
@@ -437,8 +427,8 @@ bool drv::setTDecay(unsigned int value) {
     return false;
   }
   
-  bool success = write(DECAY, outgoing);
-  return logger.logSet("DECAY", "TDECAY", value, success);
+  write(DECAY, outgoing);
+  return logger.logSet("DECAY", "TDECAY", value, getTDecay() == value);
 }
 
 bool drv::setDecMode(char* value) {
@@ -462,8 +452,8 @@ bool drv::setDecMode(char* value) {
     return false;
   }
 
-  bool success = write(DECAY, outgoing);
-  return logger.logSet("DECAY", "DECMOD", value, success);
+  write(DECAY, outgoing);
+  return logger.logSet("DECAY", "DECMOD", value, getDecMode() == value);
 }
 
 bool drv::setOCPThresh(int value) {
@@ -486,8 +476,8 @@ bool drv::setOCPThresh(int value) {
     return false;
   }
   
-  bool success = write(DRIVE, outgoing);
-  return logger.logSet("DRIVE", "OCPTH", value, success);
+  write(DRIVE, outgoing);
+  return logger.logSet("DRIVE", "OCPTH", value, getOCPThresh() == value);
 }
 
 bool drv::setOCPDeglitchTime(float value) {
@@ -510,11 +500,11 @@ bool drv::setOCPDeglitchTime(float value) {
     return false;
   }
 
-  bool success = write(DRIVE, outgoing);
-  return logger.logSet("DRIVE", "OCPTH", value, success);
+  write(DRIVE, outgoing);
+  return logger.logSet("DRIVE", "OCPTH", value, getOCPDeglitchTime() == value);
 }
 
-bool drv::setGDSinkTime(int value) {
+bool drv::setTDriveN(int value) {
   unsigned int current = read(DRIVE);
   unsigned int outgoing;
 
@@ -534,11 +524,11 @@ bool drv::setGDSinkTime(int value) {
     return false;
   }
 
-  bool success = write(DRIVE, outgoing);
-  return logger.logSet("DRIVE", "TDRIVEN", value, success);
+  write(DRIVE, outgoing);
+  return logger.logSet("DRIVE", "TDRIVEN", value, getTDriveN() == value);
 }
 
-bool drv::setGDSourceTime(int value) {
+bool drv::setTDriveP(int value) {
   unsigned int current = read(DRIVE);
   unsigned int outgoing;
 
@@ -558,11 +548,11 @@ bool drv::setGDSourceTime(int value) {
     return false;
   }
   
-  bool success = write(DRIVE, outgoing);
-  return logger.logSet("DRIVE", "TDRIVEP", value, success);
+  write(DRIVE, outgoing);
+  return logger.logSet("DRIVE", "TDRIVEP", value, getTDriveP() == value);
 }
 
-bool drv::setGDSinkPkCurrent(int value) {
+bool drv::setIDriveN(int value) {
   unsigned int current = read(DRIVE);
   unsigned int outgoing;
 
@@ -582,11 +572,11 @@ bool drv::setGDSinkPkCurrent(int value) {
     return false;
   }
 
-  bool success = write(DRIVE, outgoing);
-  return logger.logSet("DRIVE", "IDRIVEN", value, success);
+  write(DRIVE, outgoing);
+  return logger.logSet("DRIVE", "IDRIVEN", value, getIDriveN() == value);
 }
 
-bool drv::setGDSourcePkCurrent(int value) {
+bool drv::setIDriveP(int value) {
   unsigned int current = read(DRIVE);
   unsigned int outgoing;
 
@@ -606,8 +596,8 @@ bool drv::setGDSourcePkCurrent(int value) {
     return false;
   }
 
-  bool success = write(DRIVE, outgoing);
-  return logger.logSet("DRIVE", "IDRIVEP", value, success);
+  write(DRIVE, outgoing);
+  return logger.logSet("DRIVE", "IDRIVEP", value, getIDriveP() == value);
 }
 
 // *** GETTERS ***
@@ -727,7 +717,7 @@ float drv::getOCPDeglitchTime() {
 
 }
 
-int drv::getGDSinkTime() {
+int drv::getTDriveN() {
   unsigned int current = read(DRIVE) & 0x030;
   int get = 0;
 
@@ -744,7 +734,7 @@ int drv::getGDSinkTime() {
   return get;
 }
 
-int drv::getGDSourceTime() {
+int drv::getTDriveP() {
   unsigned int current = read(DRIVE) & 0x0C0;
   int get = 0;
 
@@ -761,7 +751,7 @@ int drv::getGDSourceTime() {
   return get;
 }
 
-int drv::getGDSinkPkCurrent() {
+int drv::getIDriveN() {
   unsigned int current = read(DRIVE) & 0x300;
   int get = 0;
 
@@ -778,7 +768,7 @@ int drv::getGDSinkPkCurrent() {
   return get;
 }
 
-int drv::getGDSourcePkCurrent() {
+int drv::getIDriveP() {
   unsigned int current = read(DRIVE) & 0xC00;
   int get = 0;
 
