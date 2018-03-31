@@ -32,6 +32,8 @@ const int DECAY = 0x4;
 const int DRIVE = 0x6;
 const int STATUS = 0x7;
 
+bool faults[] = {0, 0, 0, 0, 0, 0};
+
 // constructor
 drv::drv(int out, int in, int clk, int select, int led) {
 
@@ -785,8 +787,26 @@ int drv::getIDriveP() {
   return get;
 }
 
-unsigned int drv::getFault() {
-  return read(STATUS) & 0x03F;
+void drv::getFault() {
+  unsigned int current = read(STATUS) & 0x03F;
+  if (current & 0x1) {
+    faults[0] = true;
+  }
+  if (current & 0x2) {
+    faults[1] = true;
+  }
+  if (current & 0x4) {
+    faults[2] = true;
+  }
+  if (current & 0x8) {
+    faults[3] = true;
+  }
+  if (current & 0x10) {
+    faults[4] = true;
+  }
+  if (current & 0x20) {
+    faults[5] = true;
+  }
 }
 
 void drv::clearFault(int value) {
