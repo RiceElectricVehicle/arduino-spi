@@ -70,7 +70,7 @@ bool checkValsANDBitMask (unsigned int val1, unsigned int val2, unsigned int mas
   /*
   compares two values after ANDing them with bitmask mask.
   */
-  if(val1 & mask == val2 & mask) {
+    if(val1 & mask == val2 & mask) {
     return true;
   } else {
     return false;
@@ -806,6 +806,7 @@ void drv::getFault() {
   if (current & 0x20) {
     faults[5] = true;
   }
+
 }
 
 void drv::clearFault(int value) {
