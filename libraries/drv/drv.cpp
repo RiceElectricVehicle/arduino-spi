@@ -32,8 +32,6 @@ const int DECAY = 0x4;
 const int DRIVE = 0x6;
 const int STATUS = 0x7;
 
-bool faults[] = {0, 0, 0, 0, 0, 0};
-
 // constructor
 drv::drv(int out, int in, int clk, int select, int led) {
 
@@ -57,6 +55,8 @@ drv::drv(int out, int in, int clk, int select, int led) {
       0xFA5, // B111110100101  DRIVE
       0x000, // B000000000000  STATUS
   };    
+
+  bool faults[] = {0, 0, 0, 0, 0, 0};
     
   
 }

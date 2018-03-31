@@ -31,6 +31,9 @@ class drv {
         int _SCLK;
         int _SCS;
         int _LED;
+
+        // faults
+        bool faults[];
         
         
         // register addresses
