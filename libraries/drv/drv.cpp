@@ -295,8 +295,8 @@ void drv::setLogging(char* level) {
 // *** SETTERS ***
 
 bool drv::setHbridge(char* value) {
-  unsigned int current = read(CTRL);
-  Serial.println(current);
+  // cleat bits 16-13 from the read data (not used)
+  unsigned int current = read(CTRL) & ~0xF000;
   unsigned int outgoing;
 
   if (value == "off") {
@@ -315,7 +315,7 @@ bool drv::setHbridge(char* value) {
 }
 
 bool drv::setISGain(int value) {
-  unsigned int current = read(CTRL);
+  unsigned int current = read(CTRL) & ~0xF000;
   unsigned int outgoing;
 
   if (value == 5) {
@@ -340,7 +340,7 @@ bool drv::setISGain(int value) {
 }
 
 bool drv::setDTime(int value) {
-  unsigned int current = read(CTRL);
+  unsigned int current = read(CTRL) & ~0xF000;
   unsigned int outgoing;
   
   if (value == 410) {
@@ -364,7 +364,7 @@ bool drv::setDTime(int value) {
 }
 
 bool drv::setTorque(unsigned int value) {
-  unsigned int current = read(TORQUE);
+  unsigned int current = read(TORQUE) & ~0xF000;
   unsigned int outgoing;
 
   if(value <= 255 && value >= 0) {
@@ -381,7 +381,7 @@ bool drv::setTorque(unsigned int value) {
 }
 
 bool drv::setTOff(unsigned int value) {
-  unsigned int current = read(OFF);
+  unsigned int current = read(OFF) & ~0xF000;
   unsigned int outgoing;
 
   if(value <= 255 && value >= 0) {
@@ -398,7 +398,7 @@ bool drv::setTOff(unsigned int value) {
 }
 
 bool drv::setTBlank(unsigned int value) {
-  unsigned int current = read(BLANK);
+  unsigned int current = read(BLANK) & ~0xF000;
   unsigned int outgoing;
 
   if(value <= 255 && value >= 0) {
@@ -415,7 +415,7 @@ bool drv::setTBlank(unsigned int value) {
 }
 
 bool drv::setTDecay(unsigned int value) {
-  unsigned int current = read(DECAY);
+  unsigned int current = read(DECAY)  & ~0xF000;
   unsigned int outgoing;
 
   if(value <= 255 && value >= 0) {
@@ -432,7 +432,7 @@ bool drv::setTDecay(unsigned int value) {
 }
 
 bool drv::setDecMode(char* value) {
-  unsigned int current = read(DECAY);
+  unsigned int current = read(DECAY)  & ~0xF000;
   unsigned int outgoing;
 
   if(value == "slow") {
@@ -457,7 +457,7 @@ bool drv::setDecMode(char* value) {
 }
 
 bool drv::setOCPThresh(int value) {
-  unsigned int current = read(DRIVE);
+  unsigned int current = read(DRIVE)  & ~0xF000;
   unsigned int outgoing;
 
   if (value == 250) {
@@ -481,7 +481,7 @@ bool drv::setOCPThresh(int value) {
 }
 
 bool drv::setOCPDeglitchTime(float value) {
-  unsigned int current = read(DRIVE);
+  unsigned int current = read(DRIVE) & ~0xF000;
   unsigned int outgoing;
 
   if (value == 1.05) {
@@ -505,7 +505,7 @@ bool drv::setOCPDeglitchTime(float value) {
 }
 
 bool drv::setTDriveN(int value) {
-  unsigned int current = read(DRIVE);
+  unsigned int current = read(DRIVE) & ~0xF000;
   unsigned int outgoing;
 
   if (value == 263) {
@@ -529,7 +529,7 @@ bool drv::setTDriveN(int value) {
 }
 
 bool drv::setTDriveP(int value) {
-  unsigned int current = read(DRIVE);
+  unsigned int current = read(DRIVE) & ~0xF000;
   unsigned int outgoing;
 
   if (value == 263) {
@@ -553,7 +553,7 @@ bool drv::setTDriveP(int value) {
 }
 
 bool drv::setIDriveN(int value) {
-  unsigned int current = read(DRIVE);
+  unsigned int current = read(DRIVE) & ~0xF000;
   unsigned int outgoing;
 
   if (value == 100) {
@@ -577,7 +577,7 @@ bool drv::setIDriveN(int value) {
 }
 
 bool drv::setIDriveP(int value) {
-  unsigned int current = read(DRIVE);
+  unsigned int current = read(DRIVE) & ~0xF000;
   unsigned int outgoing;
 
   if (value == 50) {

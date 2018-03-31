@@ -42,15 +42,16 @@ void setup(){
   // sailboat.read(sailboat.CTRL);
   // sailboat.setHbridge("on");
   // sailboat.setISGain(10); 
-  delay(1000);
   sailboat.setHbridge("off");
-  //sailboat.setISGain(10);
+  sailboat.setTorque(5);
+  delay(50);
+  sailboat.setTorque(0x70);
 
     
 }
 
 void loop(){
-  sailboat.read(0x00);
+  sailboat.read(sailboat.TORQUE);
   //delay(250);
   
 }
