@@ -32,6 +32,8 @@ const int DECAY = 0x4;
 const int DRIVE = 0x6;
 const int STATUS = 0x7;
 
+bool faults[] = {0, 0, 0, 0, 0, 0};
+
 // constructor
 drv::drv(int out, int in, int clk, int select) {
 
