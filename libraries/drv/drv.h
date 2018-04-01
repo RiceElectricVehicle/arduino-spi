@@ -23,14 +23,13 @@
 class drv {
     public:
         
-        drv(int out, int in, int clk, int select, int led);
+        drv(int out, int in, int clk, int select);
         
         // pins
         int _MOSI;
         int _MISO;
         int _SCLK;
         int _SCS;
-        int _LED;
 
         // faults
         bool faults[];

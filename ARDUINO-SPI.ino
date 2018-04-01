@@ -19,39 +19,41 @@
 #define MISO 12 
 #define CLK 13
 #define SCS 8 
-#define LED 2 // diagnostic LED
-#define SLEEP 7
+#define SLEEP 4
+#define FAULT 7
 
 //**** Configure the Motor Driver's Settings ****//
 
  // initialize drv object
-drv sailboat(MOSI, MISO, CLK, SCS, LED);
+drv sailboat(MOSI, MISO, CLK, SCS);
 
 void setup(){
   Serial.begin(9600);
 
   pinMode(SCS, OUTPUT); pinMode(MOSI, OUTPUT); pinMode(MISO, OUTPUT); pinMode(CLK, OUTPUT);
-  pinMode(10, OUTPUT);
-  digitalWrite(SCS, LOW); 
+  pinMode(FAULT, INPUT);
   pinMode(SLEEP, OUTPUT);
+  pinMode(10, OUTPUT);
+
   digitalWrite(SLEEP, HIGH);
-  
-  // run diagnostic
+  digitalWrite(SCS, LOW); 
+  // run diagnostic 
   sailboat.setLogging("info");
   // sailboat.regDiagnostic(sailboat.initRegs);
   // sailboat.read(sailboat.CTRL);
   // sailboat.setHbridge("on");
   // sailboat.setISGain(10); 
-  sailboat.setHbridge("off");
-  sailboat.setTorque(5);
   delay(50);
+  sailboat.setTorque(0x70);
+  delay(50);
+  sailboat.setHbridge("off");
   sailboat.setTorque(0x70);
 
     
 }
 
 void loop(){
-  sailboat.read(sailboat.TORQUE);
+  Serial.println(sailboat.getTorque());
   //delay(250);
   
 }

@@ -35,14 +35,13 @@ const int STATUS = 0x7;
 bool faults[] = {0, 0, 0, 0, 0, 0};
 
 // constructor
-drv::drv(int out, int in, int clk, int select, int led) {
+drv::drv(int out, int in, int clk, int select) {
 
   // pins
   _MOSI = out;
   _MISO = in;
   _SCLK = clk;
   _SCS = select;
-  _LED = led;
 
   // updated with currentRegisterValues
   unsigned int currentRegisterValues[8];
@@ -210,12 +209,12 @@ bool checkALL(int actualRegs[], int desiredRegs[]) {
 PUBLIC FUNCTIONS
 */
 void drv::open() {
-    digitalWrite(_SCS, HIGH);
+  digitalWrite(_SCS, HIGH);
   SPI.beginTransaction(SPISettings(140000, MSBFIRST, SPI_MODE0));  
 }
 
 void drv::close() {
-    SPI.endTransaction();
+  SPI.endTransaction();
   digitalWrite(_SCS, LOW);
 }
 
@@ -281,10 +280,9 @@ void drv::regDiagnostic(int desiredRegs[]) {
   getCurrentRegisters();
 
   if (checkALL(currentRegisterValues, desiredRegs)) {
-    digitalWrite(_LED, LOW);
+    logger.logi("initialization correct");
   } else {
-    logger.loge("default registers not loaded correctly");
-    digitalWrite(_LED, HIGH);
+    logger.loge("initialization incorrect");
   }
 }
 
